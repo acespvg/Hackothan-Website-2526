@@ -1,10 +1,82 @@
 @import "tailwindcss";
 
+/* ====================================================================
+   HACKVERSE - Global CSS Theme Configuration
+   Colors: cyan, blue, indigo, purple, violet, orange, gold
+   Inspired by the ACES logo gradient
+   ==================================================================== */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* ======= Primary Theme Colors ======= */
+  --color-primary-black: #0a0a0f;
+  --color-primary-white: #ffffff;
+  
+  /* ======= Cyan Spectrum ======= */
+  --color-cyan-light: #67e8f9;
+  --color-cyan: #22d3ee;
+  --color-cyan-dark: #06b6d4;
+  
+  /* ======= Blue/Indigo Spectrum ======= */
+  --color-blue-light: #60a5fa;
+  --color-blue: #3b82f6;
+  --color-blue-dark: #1e3a8a;
+  --color-blue-darker: #0f172a;
+  --color-indigo: #4f46e5;
+  --color-indigo-dark: #3730a3;
+  
+  /* ======= Purple/Violet Spectrum ======= */
+  --color-purple-light: #a78bfa;
+  --color-purple: #8b5cf6;
+  --color-purple-dark: #7c3aed;
+  --color-violet: #6d28d9;
+  --color-violet-dark: #4c1d95;
+  
+  /* ======= Orange/Gold Spectrum ======= */
+  --color-orange-light: #fdba74;
+  --color-orange: #f97316;
+  --color-orange-dark: #ea580c;
+  --color-gold: #fbbf24;
+  --color-gold-dark: #d97706;
+  
+  /* ======= Accent Colors ======= */
+  --color-accent-cyan: #22d3ee;
+  --color-accent-orange: #f97316;
+  --color-accent-glow: rgba(79, 70, 229, 0.5);
+  
+  /* ======= Background Colors ======= */
+  --background: #050510;
+  --background-secondary: #0d0d1a;
+  --background-card: rgba(15, 15, 35, 0.8);
+  --background-glass: rgba(255, 255, 255, 0.05);
+  
+  /* ======= Text Colors ======= */
+  --foreground: #f8fafc;
+  --foreground-muted: #94a3b8;
+  --foreground-accent: #e2e8f0;
+  
+  /* ======= Gradient Definitions ======= */
+  --gradient-primary: linear-gradient(135deg, var(--color-cyan) 0%, var(--color-indigo) 35%, var(--color-purple) 65%, var(--color-orange) 100%);
+  --gradient-hero: linear-gradient(180deg, var(--color-indigo-dark) 0%, var(--background) 100%);
+  --gradient-card: linear-gradient(145deg, rgba(34, 211, 238, 0.1) 0%, rgba(249, 115, 22, 0.1) 100%);
+  --gradient-text: linear-gradient(90deg, var(--color-cyan) 0%, var(--color-blue) 25%, var(--color-purple) 50%, var(--color-orange) 75%, var(--color-gold) 100%);
+  --gradient-button: linear-gradient(135deg, var(--color-indigo) 0%, var(--color-purple) 50%, var(--color-orange-dark) 100%);
+  
+  /* ======= Border Colors ======= */
+  --border-primary: rgba(79, 70, 229, 0.3);
+  --border-secondary: rgba(255, 255, 255, 0.1);
+  
+  /* ======= Shadow Definitions ======= */
+  --shadow-glow: 0 0 40px rgba(79, 70, 229, 0.3);
+  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --shadow-button: 0 4px 20px rgba(79, 70, 229, 0.4);
+  
+  /* ======= Animation Timing ======= */
+  --transition-fast: 150ms ease;
+  --transition-normal: 300ms ease;
+  --transition-slow: 500ms ease;
 }
 
+/* ======= Tailwind Theme Integration ======= */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -12,15 +84,505 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* ======= Base Body Styles ======= */
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
 }
+
+/* ======= Smooth Scrolling ======= */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ======= Custom Scrollbar ======= */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-indigo);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-cyan);
+}
+
+/* ======= Selection Highlight ======= */
+::selection {
+  background: var(--color-indigo);
+  color: var(--color-primary-white);
+}
+
+/* ======= Utility Classes ======= */
+.gradient-text {
+  background: var(--gradient-text);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.glass-effect {
+  background: rgba(10, 10, 20, 0.7);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+}
+
+.glass-effect-strong {
+  background: rgba(10, 10, 25, 0.85);
+  backdrop-filter: blur(25px) saturate(200%);
+  -webkit-backdrop-filter: blur(25px) saturate(200%);
+  border-bottom: 1px solid rgba(79, 70, 229, 0.2);
+  box-shadow: 
+    0 4px 30px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.glow-box {
+  box-shadow: var(--shadow-glow);
+}
+
+.card-gradient {
+  background: var(--gradient-card);
+}
+
+/* ======= Animation Keyframes ======= */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(79, 70, 229, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(79, 70, 229, 0.6); }
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 5s ease infinite;
+}
+
+/* ======= Noise Background Texture ======= */
+.noise-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ======= Grid Pattern Background ======= */
+.grid-bg {
+  background-image: 
+    linear-gradient(rgba(79, 70, 229, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(79, 70, 229, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+/* ====================================================================
+   FIRE & FLAMES THEME - Hero Section Styles
+   Aggressive, intense fire-inspired design elements
+   ==================================================================== */
+
+/* ======= Fire Color Variables ======= */
+:root {
+  --color-fire-red: #dc2626;
+  --color-fire-orange: #ea580c;
+  --color-fire-yellow: #f59e0b;
+  --color-fire-ember: #ff6b35;
+  --color-fire-glow: rgba(234, 88, 12, 0.5);
+}
+
+/* ======= Fire Gradient Text ======= */
+.fire-gradient-text {
+  background: linear-gradient(
+    135deg,
+    #fcd34d 0%,
+    #f97316 25%,
+    #ea580c 50%,
+    #dc2626 75%,
+    #f97316 100%
+  );
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: fireGradientShift 3s ease infinite;
+}
+
+@keyframes fireGradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* ======= Fire Glass Effect ======= */
+.fire-glass {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(234, 88, 12, 0.3);
+  box-shadow: 
+    0 4px 30px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 165, 0, 0.1);
+}
+
+/* ======= Fire Glow Box ======= */
+.fire-glow-box {
+  box-shadow: 
+    0 0 20px rgba(234, 88, 12, 0.3),
+    0 0 40px rgba(220, 38, 38, 0.1),
+    inset 0 0 20px rgba(234, 88, 12, 0.05);
+}
+
+/* ======= Hero Fire Background ======= */
+.hero-fire-bg {
+  background: 
+    radial-gradient(ellipse 80% 50% at 50% 100%, rgba(234, 88, 12, 0.15) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(220, 38, 38, 0.1) 0%, transparent 50%),
+    linear-gradient(180deg, #050505 0%, #0a0505 50%, #0f0805 100%);
+}
+
+/* ======= Aggressive Diagonal Lines Pattern ======= */
+.aggressive-lines {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 2px,
+    rgba(234, 88, 12, 0.1) 2px,
+    rgba(234, 88, 12, 0.1) 4px
+  );
+}
+
+/* ======= Ember Rise Animation ======= */
+@keyframes emberRise {
+  0% {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-100vh) translateX(calc(-50px + 100px * var(--random, 0.5))) scale(0);
+    opacity: 0;
+  }
+}
+
+/* ======= Floating Particle Animation for Timeline ======= */
+@keyframes floatParticle {
+  0%, 100% {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: 0.3;
+  }
+  25% {
+    transform: translateY(-30px) translateX(15px) scale(1.2);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(-50px) translateX(-10px) scale(0.8);
+    opacity: 0.8;
+  }
+  75% {
+    transform: translateY(-20px) translateX(20px) scale(1.1);
+    opacity: 0.5;
+  }
+}
+
+/* ======= Sparkle Animation ======= */
+@keyframes sparkle {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ======= Flame Wave Animation ======= */
+.flame-wave {
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(234, 88, 12, 0.1) 50%,
+    rgba(220, 38, 38, 0.2) 70%,
+    rgba(245, 158, 11, 0.1) 100%
+  );
+  animation: flameWave 3s ease-in-out infinite;
+}
+
+@keyframes flameWave {
+  0%, 100% {
+    transform: translateY(0) scaleY(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateY(-20px) scaleY(1.2);
+    opacity: 0.5;
+  }
+}
+
+/* ======= Slow Spin Animation ======= */
+.animate-spin-slow {
+  animation: spin 20s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ======= Fire Pulse Animation ======= */
+@keyframes firePulse {
+  0%, 100% { 
+    box-shadow: 0 0 20px rgba(234, 88, 12, 0.4), 0 0 60px rgba(220, 38, 38, 0.2);
+  }
+  50% { 
+    box-shadow: 0 0 40px rgba(234, 88, 12, 0.6), 0 0 80px rgba(220, 38, 38, 0.4);
+  }
+}
+
+.animate-fire-pulse {
+  animation: firePulse 2s ease-in-out infinite;
+}
+
+/* ======= Background Radial Gradient Utility ======= */
+.bg-gradient-radial {
+  background: radial-gradient(var(--tw-gradient-stops));
+}
+
+/* ====================================================================
+   FIRE BUTTON HOVER EFFECTS
+   Flame acquisition effect on hover
+   ==================================================================== */
+
+/* ======= Primary Fire Button ======= */
+.fire-btn-primary {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.fire-btn-primary::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 0;
+  background: linear-gradient(
+    0deg,
+    rgba(255, 200, 0, 0.8) 0%,
+    rgba(255, 150, 0, 0.6) 20%,
+    rgba(255, 100, 0, 0.4) 40%,
+    rgba(255, 50, 0, 0.2) 70%,
+    transparent 100%
+  );
+  transition: height 0.4s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.fire-btn-primary::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 10%;
+  right: 10%;
+  height: 0;
+  background: radial-gradient(ellipse at center, rgba(255, 200, 0, 0.9) 0%, transparent 70%);
+  filter: blur(8px);
+  transition: height 0.3s ease 0.1s, bottom 0.3s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.fire-btn-primary:hover::before {
+  height: 100%;
+  animation: flameFlicker 0.5s ease infinite;
+}
+
+.fire-btn-primary:hover::after {
+  height: 30px;
+  bottom: -5px;
+}
+
+.fire-btn-primary:hover {
+  box-shadow: 
+    0 0 30px rgba(255, 150, 0, 0.6),
+    0 0 60px rgba(255, 100, 0, 0.4),
+    0 0 90px rgba(255, 50, 0, 0.2),
+    inset 0 0 30px rgba(255, 200, 0, 0.1);
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* ======= Secondary Fire Button (Outline) ======= */
+.fire-btn-secondary {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.fire-btn-secondary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(255, 150, 0, 0) 50%,
+    rgba(255, 100, 0, 0) 100%
+  );
+  transition: all 0.4s ease;
+  pointer-events: none;
+}
+
+.fire-btn-secondary::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #ff6b00, #ffaa00, #ff6b00, transparent);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.fire-btn-secondary:hover::before {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 200, 0, 0.05) 0%,
+    rgba(255, 150, 0, 0.15) 50%,
+    rgba(255, 100, 0, 0.25) 100%
+  );
+}
+
+.fire-btn-secondary:hover::after {
+  transform: scaleX(1);
+  animation: flameBorder 1s ease infinite;
+}
+
+.fire-btn-secondary:hover {
+  border-color: rgba(255, 150, 0, 0.8);
+  box-shadow: 
+    0 0 20px rgba(255, 150, 0, 0.3),
+    0 0 40px rgba(255, 100, 0, 0.2),
+    0 5px 30px rgba(255, 100, 0, 0.3),
+    inset 0 -5px 20px rgba(255, 150, 0, 0.1);
+}
+
+/* ======= Flame Animations for Buttons ======= */
+@keyframes flameFlicker {
+  0%, 100% {
+    opacity: 0.8;
+    transform: scaleY(1) translateY(0);
+  }
+  25% {
+    opacity: 0.9;
+    transform: scaleY(1.02) translateY(-1px);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scaleY(0.98) translateY(1px);
+  }
+  75% {
+    opacity: 0.95;
+    transform: scaleY(1.01) translateY(-0.5px);
+  }
+}
+
+@keyframes flameBorder {
+  0%, 100% {
+    background-position: 0% 50%;
+    opacity: 1;
+  }
+  50% {
+    background-position: 100% 50%;
+    opacity: 0.8;
+  }
+}
+
+/* ======= Flame Particles on Hover ======= */
+.fire-btn-primary .flame-particle,
+.fire-btn-secondary .flame-particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: radial-gradient(circle, #ffcc00 0%, #ff6600 50%, transparent 100%);
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 2;
+}
+
+.fire-btn-primary:hover .flame-particle {
+  animation: riseParticle 1s ease-out infinite;
+}
+
+@keyframes riseParticle {
+  0% {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-40px) translateX(calc(-10px + 20px * var(--x, 0.5))) scale(0);
+    opacity: 0;
+  }
+}
+
+/* ======= Ember Glow Trail ======= */
+.fire-btn-primary:hover,
+.fire-btn-secondary:hover {
+  animation: emberGlow 0.5s ease forwards;
+}
+
+@keyframes emberGlow {
+  0% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.2);
+  }
+  100% {
+    filter: brightness(1.1);
+  }
+}
+
