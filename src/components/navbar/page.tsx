@@ -216,11 +216,11 @@ export default function NavBar() {
 
               {/* ── Desktop CTA ── */}
               <div className="hidden md:flex items-center gap-3 nav-animate-in" style={{ animationDelay: '0.55s' }}>
-                {/* Live pill */}
+                {/* Live pill
                 <div className="flex items-center gap-1.5 px-3 py-1 rounded-full border border-indigo-500/25 bg-indigo-500/10">
                   <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 dot-pulse" />
                   <span className="text-xs font-semibold text-indigo-300 tracking-widest uppercase">Live Soon</span>
-                </div>
+                </div> */}
 
                 {/* Register button */}
                 <motion.button
