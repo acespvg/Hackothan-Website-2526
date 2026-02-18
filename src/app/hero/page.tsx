@@ -183,32 +183,22 @@ function GlowCorona() {
       {/* Inner tight corona */}
       <motion.div
         className="absolute inset-[-8px] rounded-full pointer-events-none"
-        style={{
-          boxShadow: color,
-        }}
-        animate={{
-          scale: [1, 1.04, 1],
-        }}
+        style={{ boxShadow: color }}
+        animate={{ scale: [1, 1.04, 1] }}
         transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
       />
       {/* Mid bloom */}
       <motion.div
         className="absolute inset-[-24px] rounded-full pointer-events-none blur-xl"
         style={{ background: outerColor }}
-        animate={{
-          scale: [1, 1.08, 1],
-          opacity: [0.5, 0.85, 0.5],
-        }}
+        animate={{ scale: [1, 1.08, 1], opacity: [0.5, 0.85, 0.5] }}
         transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut', delay: 0.3 }}
       />
       {/* Outer far bloom */}
       <motion.div
         className="absolute inset-[-56px] rounded-full pointer-events-none blur-3xl"
         style={{ background: outerColor }}
-        animate={{
-          scale: [1, 1.12, 1],
-          opacity: [0.25, 0.5, 0.25],
-        }}
+        animate={{ scale: [1, 1.12, 1], opacity: [0.25, 0.5, 0.25] }}
         transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 0.6 }}
       />
     </>
@@ -219,15 +209,8 @@ function GlowCorona() {
 function LogoFloat({ children }: { children: React.ReactNode }) {
   return (
     <motion.div
-      animate={{
-        y: [0, -14, 0],
-        rotate: [-0.5, 0.5, -0.5],
-      }}
-      transition={{
-        duration: 6,
-        repeat: Infinity,
-        ease: 'easeInOut',
-      }}
+      animate={{ y: [0, -14, 0], rotate: [-0.5, 0.5, -0.5] }}
+      transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
     >
       {children}
     </motion.div>
@@ -344,6 +327,20 @@ export default function HeroSection() {
           background-size: 200% 100%;
           animation: shimmer 2.2s linear infinite;
         }
+
+        /* ── FIX 1: Mobile — logo first, then text content below ── */
+        @media (max-width: 1023px) {
+          .hero-grid {
+            display: flex !important;
+            flex-direction: column !important;
+          }
+          .hero-logo-col {
+            order: -1;
+          }
+          .hero-text-col {
+            order: 1;
+          }
+        }
       `}</style>
 
       <section className="relative min-h-screen bg-gradient-to-br from-[#060c1a] via-[#0a1228] to-[#07091a] overflow-hidden flex items-center">
@@ -375,11 +372,20 @@ export default function HeroSection() {
         <div className="absolute bottom-[30%] left-0 w-full h-px bg-gradient-to-r from-transparent via-blue-500/15 to-transparent" />
 
         {/* ─── Main content ─── */}
-        <div className="relative z-10 container mx-auto px-6 lg:px-12 py-20">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
+        {/*
+          FIX 2: Added top padding so content clears the navbar.
+          - pt-28 on mobile (taller effective navbar area on small screens)
+          - sm:pt-32 on small breakpoint
+          - lg:pt-24 on desktop (less needed since content is vertically centered and taller)
+          pb-20 retained from original py-20 (which applied to both top & bottom).
+        */}
+        <div className="relative z-10 container mx-auto px-6 lg:px-12 pt-28 sm:pt-32 lg:pt-24 pb-20">
 
-            {/* ══ LEFT CONTENT ══ */}
-            <div className="space-y-8">
+          {/* hero-grid: flex-column on mobile (logo first via order), lg:grid on desktop */}
+          <div className="hero-grid grid lg:grid-cols-2 gap-16 items-center">
+
+            {/* ══ LEFT CONTENT — hero-text-col: order:1 on mobile so it appears below the logo ══ */}
+            <div className="hero-text-col space-y-8">
 
               {/* Badge */}
               <div
@@ -464,9 +470,9 @@ export default function HeroSection() {
               </div>
             </div>
 
-            {/* ══ RIGHT — MOTION-ENHANCED LOGO ══ */}
+            {/* ══ RIGHT — MOTION-ENHANCED LOGO — hero-logo-col: order:-1 on mobile so it appears first ══ */}
             <motion.div
-              className="relative flex justify-center lg:justify-end"
+              className="hero-logo-col relative flex justify-center lg:justify-end"
               initial={{ opacity: 0, x: 48 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.85, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
