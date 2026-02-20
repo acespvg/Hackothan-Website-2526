@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { motion, useAnimationFrame, useMotionValue, useTransform } from 'motion/react';
+import CountdownTimer from "@/components/CountdownTimer";
 
 /* ─── Floating particle dot ─── */
 function Particle({ delay, duration, x, y, size }: { delay: number; duration: number; x: number; y: number; size: number }) {
@@ -432,6 +433,9 @@ export default function HeroSection() {
                 and developers collaborate to build solutions that matter.
               </p>
 
+              <div className="mt-6">
+                <CountdownTimer />
+              </div>
               {/* Stats row */}
               <div className={`flex gap-8 slide-up ${mounted ? '' : 'opacity-0'}`} style={{ animationDelay: '0.6s' }}>
                 {[
