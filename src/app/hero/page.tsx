@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { motion, useAnimationFrame, useMotionValue, useTransform } from 'motion/react';
+import CountdownTimer from "@/components/CountdownTimer";
 
 /* ─── Floating particle dot ─── */
 function Particle({ delay, duration, x, y, size }: { delay: number; duration: number; x: number; y: number; size: number }) {
@@ -366,7 +367,6 @@ export default function HeroSection() {
       `}</style>
 
       <section className="relative min-h-screen bg-gradient-to-br from-[#060c1a] via-[#0a1228] to-[#07091a] overflow-hidden flex items-center">
-
         {/* ─── Animated grid background ─── */}
         <div className="absolute inset-0 opacity-[0.07]">
           <div
@@ -431,6 +431,7 @@ export default function HeroSection() {
                 A 24-hour coding marathon where ideas ignite, innovation thrives,
                 and developers collaborate to build solutions that matter.
               </p>
+
 
               {/* Stats row */}
               <div className={`flex gap-8 slide-up ${mounted ? '' : 'opacity-0'}`} style={{ animationDelay: '0.6s' }}>
