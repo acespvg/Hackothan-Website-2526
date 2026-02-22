@@ -367,7 +367,6 @@ export default function HeroSection() {
       `}</style>
 
       <section className="relative min-h-screen bg-gradient-to-br from-[#060c1a] via-[#0a1228] to-[#07091a] overflow-hidden flex items-center">
-
         {/* ─── Animated grid background ─── */}
         <div className="absolute inset-0 opacity-[0.07]">
           <div
@@ -433,9 +432,7 @@ export default function HeroSection() {
                 and developers collaborate to build solutions that matter.
               </p>
 
-              <div className="mt-6">
-                <CountdownTimer />
-              </div>
+
               {/* Stats row */}
               <div className={`flex gap-8 slide-up ${mounted ? '' : 'opacity-0'}`} style={{ animationDelay: '0.6s' }}>
                 {[

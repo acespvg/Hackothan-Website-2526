@@ -54,7 +54,7 @@ const TimeUnit = ({ label, value }: { label: string; value: number }) => (
 );
 
 export default function CountdownTimer() {
-  const targetDate = new Date("April 3, 2026 10:00:00").getTime();
+  const targetDate = new Date("February 26, 2026 00:00:00").getTime();
   const [timeLeft, setTimeLeft] = useState(targetDate - Date.now());
 
   useEffect(() => {
@@ -89,7 +89,7 @@ export default function CountdownTimer() {
           animate={{ opacity: 1, y: 0 }}
           className="text-slate-400 text-xs md:text-sm uppercase tracking-[0.4em] mb-8 font-bold"
         >
-          Hackathon Starts In
+          Registrations Start In
         </motion.p>
 
         {/* Counter Box */}
