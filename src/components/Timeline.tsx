@@ -1,22 +1,35 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faUsers,
+  faRocket,
+  faUtensils,
+  faMugHot,
+  faChalkboardUser,
+  faScrewdriverWrench,
+  faClipboardCheck,
+  faBullhorn,
+  faCertificate,
+  faTrophy
+} from "@fortawesome/free-solid-svg-icons";
 
 const timelineEvents = [
-  { date: "March 22, 2025", time: "8:30 AM", title: "Team Reporting", description: "Team check-in and setting up workstations", icon: "🏁", tag: "Day 1" },
-  { date: "March 22, 2025", time: "10:00 AM", title: "Hackathon Begins", description: "Inauguration & 24-hour Hackathon starts", icon: "⚡", tag: "Day 1" },
-  { date: "March 22, 2025", time: "12:00 PM", title: "Lunch Break", description: "Lunch will be provided", icon: "🍽️", tag: "Day 1" },
-  { date: "March 22, 2025", time: "2:30 PM", title: "Mentor Talk", description: "Get guidance from industry experts", icon: "🎙️", tag: "Day 1" },
-  { date: "March 22, 2025", time: "4:00 PM", title: "Tea Break", description: "A short break for relaxation", icon: "☕", tag: "Day 1" },
-  { date: "March 22, 2025", time: "7:00 PM", title: "Dinner & Recreational Activities", description: "Have a networking dinner", icon: "🌙", tag: "Day 1" },
-  { date: "March 23, 2025", time: "1:00 AM", title: "Tea Break", description: "Another short break for relaxation", icon: "🌃", tag: "Day 2" },
-  { date: "March 23, 2025", time: "8:00 AM – 10:00 AM", title: "Final Touches & Breakfast", description: "Last minute adjustments before judging round", icon: "🍳", tag: "Day 2" },
-  { date: "March 23, 2025", time: "10:00 AM – 11:30 AM", title: "First Evaluation Round", description: "First Assessment Round of Teams", icon: "📊", tag: "Day 2" },
-  { date: "March 23, 2025", time: "11:45 AM", title: "Result Declaration – Round 1", description: "Announcement of round 1 selected teams", icon: "📣", tag: "Day 2" },
-  { date: "March 23, 2025", time: "11:45 – 12:00 PM", title: "Certificate & Goodies Distribution", description: "For eliminated teams, certificates and goodies will be distributed.", icon: "🎖️", tag: "Day 2" },
-  { date: "March 23, 2025", time: "12:00 – 12:30 PM", title: "Lunch", description: "Lunch for teams selected for final round", icon: "🥗", tag: "Day 2" },
-  { date: "March 23, 2025", time: "12:30 – 2:00 PM", title: "Final Evaluation Round", description: "Participant presentations and judgment assessments.", icon: "🏆", tag: "Day 2" },
-  { date: "March 23, 2025", time: "2:15 – 3:30 PM", title: "Prize Distribution", description: "Recognition and awarding of winners.", icon: "🥇", tag: "Day 2" },
+  { date: "March 22, 2025", time: "8:30 AM", title: "Team Reporting", description: "Team check-in and setting up workstations", icon: faUsers, tag: "Day 1" },
+  { date: "March 22, 2025", time: "10:00 AM", title: "Hackathon Begins", description: "Inauguration & 24-hour Hackathon starts",icon: faRocket,  tag: "Day 1" },
+  { date: "March 22, 2025", time: "12:00 PM", title: "Lunch Break", description: "Lunch will be provided",icon: faUtensils,  tag: "Day 1" },
+  { date: "March 22, 2025", time: "2:30 PM", title: "Mentor Talk", description: "Get guidance from industry experts",icon: faChalkboardUser,  tag: "Day 1" },
+  { date: "March 22, 2025", time: "4:00 PM", title: "Tea Break", description: "A short break for relaxation",icon: faMugHot,  tag: "Day 1" },
+  { date: "March 22, 2025", time: "7:00 PM", title: "Dinner & Recreational Activities", description: "Have a networking dinner",icon: faUtensils, tag: "Day 1" },
+  { date: "March 23, 2025", time: "1:00 AM", title: "Tea Break", description: "Another short break for relaxation",icon: faMugHot,  tag: "Day 2" },
+  { date: "March 23, 2025", time: "8:00 AM – 10:00 AM", title: "Final Touches & Breakfast", description: "Last minute adjustments before judging round",icon: faScrewdriverWrench, tag: "Day 2" },
+  { date: "March 23, 2025", time: "10:00 AM – 11:30 AM", title: "First Evaluation Round", description: "First Assessment Round of Teams",icon: faClipboardCheck, tag: "Day 2" },
+  { date: "March 23, 2025", time: "11:45 AM", title: "Result Declaration – Round 1", description: "Announcement of round 1 selected teams",icon: faBullhorn,  tag: "Day 2" },
+  { date: "March 23, 2025", time: "11:45 – 12:00 PM", title: "Certificate & Goodies Distribution", description: "For eliminated teams, certificates and goodies will be distributed.",icon: faCertificate,  tag: "Day 2" },
+  { date: "March 23, 2025", time: "12:00 – 12:30 PM", title: "Lunch", description: "Lunch for teams selected for final round",icon: faUtensils, tag: "Day 2" },
+  { date: "March 23, 2025", time: "12:30 – 2:00 PM", title: "Final Evaluation Round", description: "Participant presentations and judgment assessments.", icon: faClipboardCheck, tag: "Day 2" },
+  { date: "March 23, 2025", time: "2:15 – 3:30 PM", title: "Prize Distribution", description: "Recognition and awarding of winners.", icon: faTrophy,  tag: "Day 2" },
 ];
 
 // ── FIX 1: No explicit return type annotation — TypeScript infers it safely.
@@ -62,10 +75,10 @@ function TimelineItem({ event, index }: { event: typeof timelineEvents[0]; index
           gap: '16px',
         }}>
           <div style={{ flex: 1, height: '1px', background: 'linear-gradient(to right, transparent, rgba(56,189,248,0.4))' }} />
-          <div style={{
+          <div className="day-divider-pill" style={{
             padding: '6px 20px',
             borderRadius: '999px',
-            background: 'rgba(56,189,248,0.1)',
+            background: '#0b1220',
             border: '1px solid rgba(56,189,248,0.4)',
             color: '#38bdf8',
             fontSize: '11px',
@@ -73,6 +86,7 @@ function TimelineItem({ event, index }: { event: typeof timelineEvents[0]; index
             letterSpacing: '3px',
             textTransform: 'uppercase' as const,
             fontFamily: "'Trebuchet MS', sans-serif",
+            whiteSpace: 'nowrap' as const,
           }}>March 23 · Day 2</div>
           <div style={{ flex: 1, height: '1px', background: 'linear-gradient(to left, transparent, rgba(56,189,248,0.4))' }} />
         </div>
@@ -80,19 +94,23 @@ function TimelineItem({ event, index }: { event: typeof timelineEvents[0]; index
 
       <div
         ref={ref}
+        className="tl-item-grid"
         style={{
+          // ── Same 3-column alternating grid on ALL screen sizes (mobile + desktop).
+          // On mobile the center column shrinks via CSS class override below.
           display: 'grid',
           gridTemplateColumns: '1fr 60px 1fr',
           alignItems: 'start',
           marginBottom: '28px',
           opacity: inView ? 1 : 0,
+          // ── Slide direction always matches card side — same on mobile and desktop
           transform: inView
             ? 'translateX(0)'
             : isLeft ? 'translateX(-40px)' : 'translateX(40px)',
           transition: `opacity 0.6s cubic-bezier(.22,1,.36,1) ${index * 60}ms, transform 0.6s cubic-bezier(.22,1,.36,1) ${index * 60}ms`,
         }}
       >
-        {/* Content — left or right depending on index */}
+        {/* Content — left or right depending on index, identical on all screen sizes */}
         <div style={{ gridColumn: isLeft ? '1' : '3', gridRow: 1, display: 'flex', justifyContent: isLeft ? 'flex-end' : 'flex-start' }}>
           <Card event={event} isLeft={isLeft} />
         </div>
@@ -108,7 +126,7 @@ function TimelineItem({ event, index }: { event: typeof timelineEvents[0]; index
           position: 'relative',
           zIndex: 2,
         }}>
-          <div style={{
+          <div className="tl-node-circle" style={{
             width: '44px',
             height: '44px',
             borderRadius: '50%',
@@ -122,7 +140,7 @@ function TimelineItem({ event, index }: { event: typeof timelineEvents[0]; index
             flexShrink: 0,
             transition: 'box-shadow 0.3s',
           }}>
-            {event.icon}
+            { <FontAwesomeIcon icon={event.icon} style={{ color: '#fff' }} />}
           </div>
         </div>
 
@@ -137,6 +155,7 @@ function Card({ event, isLeft }: { event: typeof timelineEvents[0]; isLeft: bool
   const [hovered, setHovered] = useState(false);
   return (
     <div
+      className="tl-card"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
@@ -168,20 +187,27 @@ function Card({ event, isLeft }: { event: typeof timelineEvents[0]; isLeft: bool
       }} />
 
       {/* Time pill */}
-      <div style={{
+      <div className="tl-time-pill" style={{
         display: 'inline-flex', alignItems: 'center', gap: '6px',
         padding: '3px 10px', borderRadius: '999px',
         background: 'rgba(56,189,248,0.1)', border: '1px solid rgba(56,189,248,0.25)',
         marginBottom: '10px',
+        maxWidth: '100%',
+        overflow: 'hidden',
       }}>
         <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#38bdf8', display: 'inline-block', flexShrink: 0 }} />
-        <span style={{ color: '#38bdf8', fontSize: '11px', fontWeight: 600, letterSpacing: '0.5px', fontFamily: "'Trebuchet MS', sans-serif", whiteSpace: 'nowrap' }}>
+        <span className="tl-card-time-text" style={{
+          color: '#38bdf8', fontSize: '11px', fontWeight: 600, letterSpacing: '0.5px',
+          fontFamily: "'Trebuchet MS', sans-serif",
+          // ── Truncate on very narrow cards instead of overflowing
+          overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+        }}>
           {event.time}
         </span>
       </div>
 
       {/* Title */}
-      <h3 style={{
+      <h3 className="tl-card-title" style={{
         color: '#fff', fontSize: '16px', fontWeight: 700, margin: '0 0 6px',
         fontFamily: "'Trebuchet MS', sans-serif", lineHeight: 1.3,
         background: hovered ? 'linear-gradient(90deg, #93c5fd, #a5b4fc)' : 'none',
@@ -194,7 +220,7 @@ function Card({ event, isLeft }: { event: typeof timelineEvents[0]; isLeft: bool
       </h3>
 
       {/* Description */}
-      <p style={{
+      <p className="tl-card-desc" style={{
         color: '#94a3b8', fontSize: '13px', margin: 0, lineHeight: 1.6,
         fontFamily: "'Trebuchet MS', sans-serif",
       }}>
@@ -240,18 +266,90 @@ export default function Timeline() {
           animation: float-chip 4s ease-in-out infinite;
         }
 
+        /* ── Mobile (≤ 700px): keep the SAME alternating left/right layout as desktop.
+              Only shrink the center spine column + node circle + card text
+              so both halves still fit on a narrow screen ── */
         @media (max-width: 700px) {
+          /* Narrow center spine column: 60px → 32px */
           .tl-item-grid {
-            grid-template-columns: 40px 1fr !important;
+            grid-template-columns: 1fr 32px 1fr !important;
           }
-          .tl-empty-col { display: none !important; }
-          .tl-content-left  { grid-column: 2 !important; grid-row: 1 !important; justify-content: flex-start !important; }
-          .tl-content-right { grid-column: 2 !important; grid-row: 1 !important; }
-          .tl-node-col { grid-column: 1 !important; }
+
+          /* Shrink node circle to fit the tighter column */
+          .tl-node-circle {
+            width: 28px !important;
+            height: 28px !important;
+            font-size: 13px !important;
+          }
+
+          /* Cards: reduce padding and font sizes to fit half the screen width */
+          .tl-card {
+            padding: 10px 12px !important;
+            border-radius: 12px !important;
+          }
+          .tl-card-time-text {
+            font-size: 9px !important;
+            letter-spacing: 0 !important;
+          }
+          .tl-card-title {
+            font-size: 12px !important;
+            margin-bottom: 4px !important;
+          }
+          .tl-card-desc {
+            font-size: 10px !important;
+            line-height: 1.5 !important;
+          }
+          .tl-time-pill {
+            padding: 2px 6px !important;
+            margin-bottom: 6px !important;
+          }
+
+          /* Day-divider pills: shrink text so they don't overflow */
+          .day-divider-pill {
+            font-size: 8px !important;
+            letter-spacing: 1.5px !important;
+            padding: 5px 10px !important;
+          }
+
+          /* Reduce outer section padding on small screens */
+          .tl-section {
+            padding: 60px 0 80px !important;
+          }
+
+          /* Tighten header bottom margin */
+          .tl-header-section {
+            margin-bottom: 48px !important;
+          }
+        }
+
+        /* ── Extra-small screens (≤ 400px) ── */
+        @media (max-width: 400px) {
+          /* Further shrink center to 24px */
+          .tl-item-grid {
+            grid-template-columns: 1fr 24px 1fr !important;
+          }
+          .tl-node-circle {
+            width: 20px !important;
+            height: 20px !important;
+            font-size: 10px !important;
+            border-width: 2px !important;
+          }
+          .tl-card {
+            padding: 8px 8px !important;
+          }
+          .tl-card-time-text {
+            font-size: 7px !important;
+          }
+          .tl-card-title {
+            font-size: 10px !important;
+          }
+          .tl-card-desc {
+            font-size: 9px !important;
+          }
         }
       `}</style>
 
-      <section style={{
+      <section className="tl-section" style={{
         background: 'linear-gradient(180deg, #060c1a 0%, #0a1228 50%, #060c1a 100%)',
         position: 'relative',
         padding: '100px 0 120px',
@@ -272,10 +370,11 @@ export default function Timeline() {
         <div style={{ position: 'absolute', top: '-100px', right: '-150px', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(99,102,241,0.18) 0%, transparent 70%)', borderRadius: '50%', animation: 'orb-drift 8s ease-in-out infinite', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', bottom: '-100px', left: '-150px', width: '450px', height: '450px', background: 'radial-gradient(circle, rgba(56,189,248,0.14) 0%, transparent 70%)', borderRadius: '50%', animation: 'orb-drift 10s ease-in-out infinite reverse', pointerEvents: 'none' }} />
 
+        {/* ── Horizontal padding reduced on mobile (0 16px) vs desktop (0 24px) via inline + CSS override */}
         <div style={{ maxWidth: '900px', margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 1 }}>
 
           {/* Header */}
-          <div style={{ textAlign: 'center', marginBottom: '72px' }}>
+          <div className="tl-header-section" style={{ textAlign: 'center', marginBottom: '72px' }}>
             <div className="day-chip" style={{
               display: 'inline-flex', alignItems: 'center', gap: '8px',
               padding: '6px 18px', borderRadius: '999px',
@@ -308,18 +407,19 @@ export default function Timeline() {
           {/* Day 1 label */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', marginBottom: '32px' }}>
             <div style={{ flex: 1, height: '1px', background: 'linear-gradient(to right, transparent, rgba(99,102,241,0.4))' }} />
-            <div style={{
+            <div className="day-divider-pill" style={{
               padding: '6px 20px', borderRadius: '999px',
-              background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.4)',
+              background: '#0b1220', border: '1px solid rgba(99,102,241,0.4)',
               color: '#a5b4fc', fontSize: '11px', fontWeight: 700, letterSpacing: '3px',
               textTransform: 'uppercase', fontFamily: "'Trebuchet MS', sans-serif",
+              whiteSpace: 'nowrap',
             }}>March 22 · Day 1</div>
             <div style={{ flex: 1, height: '1px', background: 'linear-gradient(to left, transparent, rgba(99,102,241,0.4))' }} />
           </div>
 
           {/* Timeline items */}
           <div style={{ position: 'relative' }}>
-            {/* Center spine */}
+            {/* Center spine — stays at 50% on all screen sizes, matching the center node column */}
             <div style={{
               position: 'absolute', left: '50%', top: 0, bottom: 0,
               width: '3px', transform: 'translateX(-50%)',
