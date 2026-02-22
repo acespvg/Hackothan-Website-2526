@@ -405,8 +405,6 @@ const formFields: FormField[] = [
   { name: 'course', label: 'Course', type: 'text', required: true },
   { name: 'courseSpecialization', label: 'Course Specialization', type: 'text', required: true },
   { name: 'graduationYear', label: 'Graduation Year', type: 'number', required: true },
-  // ✅ FIX: isAcesMember checkbox now included in formFields
-  { name: 'isAcesMember', label: 'Are you an ACES Member?', type: 'checkbox', required: false },
   { name: 'receipt', label: 'Upload Receipt (ACES Members only)', type: 'file', required: false, accept: 'image/*' },
 ];
 
@@ -538,89 +536,98 @@ const RegistrationForm: React.FC = () => {
   // ── Submit: upload all files to Cloudinary then POST ──
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
-    event.preventDefault();
-    if (!validateForm()) return;
+  event.preventDefault();
+  if (!validateForm()) return;
 
-    setIsSubmitting(true);
-    setSubmitMessage({ type: '', text: '' });
+  setIsSubmitting(true);
+  setSubmitMessage({ type: '', text: '' });
 
-    try {
-      // ✅ FIX: Upload all files only at submit time
-      setSubmitMessage({ type: '', text: '' });
+  try {
+    // Upload payment screenshot
+    const paymentScreenshotUrl = await uploadToCloudinary(paymentFile!);
 
-      // Upload payment screenshot
-      const paymentScreenshotUrl = await uploadToCloudinary(paymentFile!);
+    // Upload leader receipt if present
+    let leaderReceiptUrl = '';
+    if (leaderData.isAcesMember && leaderData.receipt instanceof File) {
+      leaderReceiptUrl = await uploadToCloudinary(leaderData.receipt);
+    }
 
-      // Upload leader receipt if present
-      let leaderReceiptUrl = '';
-      if (leaderData.isAcesMember && leaderData.receipt instanceof File) {
-        leaderReceiptUrl = await uploadToCloudinary(leaderData.receipt);
+    // Upload team member receipts if present
+    const memberReceiptUrls: string[] = [];
+    for (const member of teamMembersData) {
+      if (member.isAcesMember && member.receipt instanceof File) {
+        const url = await uploadToCloudinary(member.receipt);
+        memberReceiptUrls.push(url);
+      } else {
+        memberReceiptUrls.push('');
       }
+    }
 
-      // Upload team member receipts if present
-      const memberReceiptUrls: string[] = [];
-      for (const member of teamMembersData) {
-        if (member.isAcesMember && member.receipt instanceof File) {
-          const url = await uploadToCloudinary(member.receipt);
-          memberReceiptUrls.push(url);
-        } else {
-          memberReceiptUrls.push('');
-        }
-      }
+    // Build clean payload
+    const payload = {
+      teamName,
+      teamSize,
+      leader: { ...leaderData, receipt: leaderReceiptUrl },
+      teamMembers: teamMembersData.map((m, i) => ({ ...m, receipt: memberReceiptUrls[i] })),
+      paymentScreenshot: paymentScreenshotUrl,
+      pptLink,
+      videoLink,
+      registrationStatus: 'pending',
+    };
 
-      // Build clean payload (replace File objects with URLs)
-      const payload = {
+    // Submit registration to backend
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000';
+    const response = await fetch(`${backendUrl}/api/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || 'Registration failed. Please try again.');
+    }
+
+    await response.json();
+
+    // ✅ Send confirmation email via Next.js API route (non-blocking)
+    fetch('/api/send-email', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
         teamName,
         teamSize,
         leader: { ...leaderData, receipt: leaderReceiptUrl },
         teamMembers: teamMembersData.map((m, i) => ({ ...m, receipt: memberReceiptUrls[i] })),
-        paymentScreenshot: paymentScreenshotUrl,
-        pptLink,
-        videoLink,
-        registrationStatus: 'pending',
-      };
+      }),
+    }).catch((err) => console.error('Email send failed:', err));
 
-      // ✅ FIX: Use NEXT_PUBLIC_ env variable
-      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000';
-      const response = await fetch(`${backendUrl}/api/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
+    // Show success message
+    setSubmitMessage({
+      type: 'success',
+      text: 'Team registration successful! Your registration is pending verification. You will receive a confirmation email shortly.',
+    });
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || 'Registration failed. Please try again.');
-      }
+    // Reset form
+    setTeamName('');
+    setLeaderData(initialFormData);
+    setTeamMembersData([{ ...initialFormData }]);
+    setPaymentFile(null);
+    setPptLink('');
+    setVideoLink('');
+    setFilePreview({ leader: null, members: Array(3).fill(null), paymentScreenshot: null });
 
-      await response.json();
-
-      setSubmitMessage({
-        type: 'success',
-        text: 'Team registration successful! Your registration is pending verification. You will receive a confirmation email shortly.',
-      });
-
-      // Reset form
-      setTeamName('');
-      setLeaderData(initialFormData);
-      setTeamMembersData([{ ...initialFormData }]);
-      setPaymentFile(null);
-      setPptLink('');
-      setVideoLink('');
-      setFilePreview({ leader: null, members: Array(3).fill(null), paymentScreenshot: null });
-
-    } catch (error) {
-      const err = error as Error;
-      setSubmitMessage({
-        type: 'error',
-        text: err.message || 'There was an error submitting your registration. Please try again.',
-      });
-    } finally {
-      setIsSubmitting(false);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  };
-
+  } catch (error) {
+    const err = error as Error;
+    setSubmitMessage({
+      type: 'error',
+      text: err.message || 'There was an error submitting your registration. Please try again.',
+    });
+  } finally {
+    setIsSubmitting(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+};
   const showReceipt = (data: FormData): boolean => data.isAcesMember;
 
   // ── Render field ──
@@ -765,7 +772,7 @@ const RegistrationForm: React.FC = () => {
                   <strong>Note:</strong> The first round is purely for screening purposes. Your main problem
                   statement for the hackathon will be different and provided 16 hours before the event.
                 </p>
-                <p><strong>If you are not selected for Round 2, your amount will be fully refunded.</strong></p>
+                <p><strong>If you are not selected for Round 2, 50% of your amount will be refunded.</strong></p>
                 <p>Ensure both Drive links are publicly accessible (view access for anyone with the link).</p>
               </div>
 

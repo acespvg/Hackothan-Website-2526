@@ -3,19 +3,20 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 const NAV_LINKS = [
-  { label: 'Home',              href: '/home'              },
-  { label: 'Prizes',            href: '/prizes'            },
-  { label: 'Timeline',          href: '/timeline'          },
+  { label: 'Home', href: '/home' },
+  { label: 'Prizes', href: '/prizes' },
+  { label: 'Timeline', href: '/timeline' },
   { label: 'Problem Statement', href: '/problem-statement' },
-  { label: 'Rulebook',          href: '/rulebook'          },
+  { label: 'Rulebook', href: '/rulebook' },
 ];
 
 export default function NavBar() {
-  const [scrolled,     setScrolled]     = useState(false);
-  const [menuOpen,     setMenuOpen]     = useState(false);
-  const [activeLink,   setActiveLink]   = useState('home');
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [activeLink, setActiveLink] = useState('home');
 
   const router = useRouter();
 
@@ -109,7 +110,7 @@ export default function NavBar() {
       <motion.nav
         className="fixed top-0 left-0 right-0 z-50"
         initial={{ y: -80, opacity: 0 }}
-        animate={{ y: 0,   opacity: 1 }}
+        animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
       >
         {/* Frosted glass panel */}
@@ -170,12 +171,19 @@ export default function NavBar() {
                 whileHover={{ scale: 1.03 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 20 }}
               >
-                {/* Icon mark */}
-                <div className="relative w-9 h-9 flex items-center justify-center">
-                  <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 opacity-90" />
-                  <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 blur-md opacity-50 group-hover:opacity-80 transition-opacity duration-300" />
-                  <span className="relative text-white font-black text-sm" style={{ fontFamily: "'Trebuchet MS', sans-serif" }}>IH</span>
+                {/* Logo Image */}
+                <div className="relative w-10 h-10 md:w-12 md:h-12 flex-shrink-0">
+                  <Image
+                    src="/igF2.png"
+                    alt="Logo"
+                    fill
+                    className="object-contain"
+                    priority
+                  />
                 </div>
+
+                {/* Icon mark */}
+
 
                 {/* Wordmark */}
                 <div style={{ fontFamily: "'Trebuchet MS', sans-serif" }}>
@@ -356,11 +364,10 @@ export default function NavBar() {
                       key={label}
                       href={href}
                       onClick={() => { setActiveLink(id); setMenuOpen(false); }}
-                      className={`mobile-link-glow flex items-center gap-3 px-4 py-3.5 rounded-xl font-semibold text-sm tracking-wide transition-all duration-200 ${
-                        isActive
-                          ? 'text-blue-300 bg-blue-500/10 border border-blue-500/25'
-                          : 'text-gray-400 hover:text-white hover:bg-white/5 border border-transparent'
-                      }`}
+                      className={`mobile-link-glow flex items-center gap-3 px-4 py-3.5 rounded-xl font-semibold text-sm tracking-wide transition-all duration-200 ${isActive
+                        ? 'text-blue-300 bg-blue-500/10 border border-blue-500/25'
+                        : 'text-gray-400 hover:text-white hover:bg-white/5 border border-transparent'
+                        }`}
                       style={{ fontFamily: "'Trebuchet MS', sans-serif" }}
                       initial={{ opacity: 0, x: 24 }}
                       animate={{ opacity: 1, x: 0 }}

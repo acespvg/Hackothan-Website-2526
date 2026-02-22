@@ -1,11 +1,29 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import { useEffect, useRef, useState } from 'react';
-import { motion, useAnimationFrame, useMotionValue, useTransform } from 'motion/react';
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+import {
+  motion,
+  useAnimationFrame,
+  useMotionValue,
+  useTransform,
+} from "motion/react";
+import Link from "next/link";
 
 /* ─── Floating particle dot ─── */
-function Particle({ delay, duration, x, y, size }: { delay: number; duration: number; x: number; y: number; size: number }) {
+function Particle({
+  delay,
+  duration,
+  x,
+  y,
+  size,
+}: {
+  delay: number;
+  duration: number;
+  x: number;
+  y: number;
+  size: number;
+}) {
   return (
     <div
       className="absolute rounded-full bg-blue-400/30 animate-float"
@@ -22,7 +40,7 @@ function Particle({ delay, duration, x, y, size }: { delay: number; duration: nu
 }
 
 /* ─── Animated counter ─── */
-function Counter({ end, suffix = '' }: { end: number; suffix?: string }) {
+function Counter({ end, suffix = "" }: { end: number; suffix?: string }) {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLSpanElement>(null);
 
@@ -33,8 +51,10 @@ function Counter({ end, suffix = '' }: { end: number; suffix?: string }) {
         const step = end / 60;
         const timer = setInterval(() => {
           start += step;
-          if (start >= end) { setCount(end); clearInterval(timer); }
-          else setCount(Math.floor(start));
+          if (start >= end) {
+            setCount(end);
+            clearInterval(timer);
+          } else setCount(Math.floor(start));
         }, 20);
         observer.disconnect();
       }
@@ -43,7 +63,12 @@ function Counter({ end, suffix = '' }: { end: number; suffix?: string }) {
     return () => observer.disconnect();
   }, [end]);
 
-  return <span ref={ref}>{count.toLocaleString()}{suffix}</span>;
+  return (
+    <span ref={ref}>
+      {count.toLocaleString()}
+      {suffix}
+    </span>
+  );
 }
 
 /* ─── Typewriter ─── */
@@ -51,29 +76,32 @@ function Typewriter({ words }: { words: string[] }) {
   const [wordIndex, setWordIndex] = useState(0);
   const [charIndex, setCharIndex] = useState(0);
   const [deleting, setDeleting] = useState(false);
-  const [displayed, setDisplayed] = useState('');
+  const [displayed, setDisplayed] = useState("");
 
   useEffect(() => {
     const current = words[wordIndex];
-    const timeout = setTimeout(() => {
-      if (!deleting) {
-        setDisplayed(current.slice(0, charIndex + 1));
-        if (charIndex + 1 === current.length) {
-          setTimeout(() => setDeleting(true), 1600);
+    const timeout = setTimeout(
+      () => {
+        if (!deleting) {
+          setDisplayed(current.slice(0, charIndex + 1));
+          if (charIndex + 1 === current.length) {
+            setTimeout(() => setDeleting(true), 1600);
+          } else {
+            setCharIndex((c) => c + 1);
+          }
         } else {
-          setCharIndex(c => c + 1);
+          setDisplayed(current.slice(0, charIndex - 1));
+          if (charIndex - 1 === 0) {
+            setDeleting(false);
+            setWordIndex((w) => (w + 1) % words.length);
+            setCharIndex(0);
+          } else {
+            setCharIndex((c) => c - 1);
+          }
         }
-      } else {
-        setDisplayed(current.slice(0, charIndex - 1));
-        if (charIndex - 1 === 0) {
-          setDeleting(false);
-          setWordIndex(w => (w + 1) % words.length);
-          setCharIndex(0);
-        } else {
-          setCharIndex(c => c - 1);
-        }
-      }
-    }, deleting ? 55 : 90);
+      },
+      deleting ? 55 : 90,
+    );
     return () => clearTimeout(timeout);
   }, [charIndex, deleting, wordIndex, words]);
 
@@ -86,7 +114,15 @@ function Typewriter({ words }: { words: string[] }) {
 }
 
 /* ─── Spark that flies outward from the logo ─── */
-function LogoSpark({ angle, delay, radius }: { angle: number; delay: number; radius: number }) {
+function LogoSpark({
+  angle,
+  delay,
+  radius,
+}: {
+  angle: number;
+  delay: number;
+  radius: number;
+}) {
   const rad = (angle * Math.PI) / 180;
   const tx = Math.cos(rad) * radius;
   const ty = Math.sin(rad) * radius;
@@ -96,8 +132,8 @@ function LogoSpark({ angle, delay, radius }: { angle: number; delay: number; rad
       style={{
         width: 5,
         height: 5,
-        top: '50%',
-        left: '50%',
+        top: "50%",
+        left: "50%",
         marginTop: -2.5,
         marginLeft: -2.5,
         background: `hsl(${(angle * 1.2 + 200) % 360}, 90%, 70%)`,
@@ -120,56 +156,6 @@ function LogoSpark({ angle, delay, radius }: { angle: number; delay: number; rad
   );
 }
 
-/* ─── Rotating energy beam arc around the logo ─── */
-function EnergyBeam({ radius, duration, color, startAngle, mobileRadius }: {
-  radius: number;
-  duration: number;
-  color: string;
-  startAngle: number;
-  mobileRadius: number;
-}) {
-  const renderSVG = (r: number, cls: string) => (
-    <motion.div
-      className={`absolute inset-0 flex items-center justify-center pointer-events-none ${cls}`}
-      animate={{ rotate: 360 }}
-      transition={{ duration, repeat: Infinity, ease: 'linear' }}
-      style={{ rotate: startAngle }}
-    >
-      <svg
-        className="absolute"
-        width={r * 2 + 20}
-        height={r * 2 + 20}
-        viewBox={`0 0 ${r * 2 + 20} ${r * 2 + 20}`}
-        style={{ overflow: 'visible' }}
-      >
-        <defs>
-          <filter id={`beam-blur-${r}-${color.slice(5, 10)}`}>
-            <feGaussianBlur stdDeviation="3" result="blur" />
-          </filter>
-        </defs>
-        <path
-          d={`M ${r + 10} 10 A ${r} ${r} 0 0 1 ${r * 2 + 10} ${r + 10}`}
-          fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" opacity="0.85"
-        />
-        <path
-          d={`M ${r + 10} 10 A ${r} ${r} 0 0 1 ${r * 2 + 10} ${r + 10}`}
-          fill="none" stroke={color} strokeWidth="6" strokeLinecap="round" opacity="0.3"
-          filter={`url(#beam-blur-${r}-${color.slice(5, 10)})`}
-        />
-        <circle cx={r + 10} cy={10} r={4} fill={color} opacity="0.9" />
-        <circle cx={r + 10} cy={10} r={8} fill={color} opacity="0.2" filter={`url(#beam-blur-${r}-${color.slice(5, 10)})`} />
-      </svg>
-    </motion.div>
-  );
-
-  return (
-    <>
-      {renderSVG(radius, 'beam-desktop')}
-      {renderSVG(mobileRadius, 'beam-mobile')}
-    </>
-  );
-}
-
 /* ─── Pulsing color-cycling glow corona ─── */
 function GlowCorona() {
   const hue = useMotionValue(220);
@@ -186,19 +172,29 @@ function GlowCorona() {
         className="absolute inset-[-8px] rounded-full pointer-events-none"
         style={{ boxShadow: color }}
         animate={{ scale: [1, 1.04, 1] }}
-        transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
         className="absolute inset-[-24px] rounded-full pointer-events-none blur-xl"
         style={{ background: outerColor }}
         animate={{ scale: [1, 1.08, 1], opacity: [0.5, 0.85, 0.5] }}
-        transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut', delay: 0.3 }}
+        transition={{
+          duration: 3.5,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 0.3,
+        }}
       />
       <motion.div
         className="absolute inset-[-56px] rounded-full pointer-events-none blur-3xl"
         style={{ background: outerColor }}
         animate={{ scale: [1, 1.12, 1], opacity: [0.25, 0.5, 0.25] }}
-        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 0.6 }}
+        transition={{
+          duration: 4,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 0.6,
+        }}
       />
     </>
   );
@@ -209,7 +205,7 @@ function LogoFloat({ children }: { children: React.ReactNode }) {
   return (
     <motion.div
       animate={{ y: [0, -14, 0], rotate: [-0.5, 0.5, -0.5] }}
-      transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+      transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
     >
       {children}
     </motion.div>
@@ -338,13 +334,7 @@ export default function HeroSection() {
         }
 
         /* ── Mobile orbit radius fixes ── */
-        .beam-desktop { display: block; }
-        .beam-mobile  { display: none; }
-
         @media (max-width: 1023px) {
-          .beam-desktop { display: none !important; }
-          .beam-mobile  { display: block !important; }
-
           /* CSS spinning rings — shrink so they stay inside the card */
           .ring-outer { inset: -10px !important; }
           .ring-mid   { inset: -20px !important; }
@@ -353,10 +343,6 @@ export default function HeroSection() {
           /* Sparks — hide on mobile */
           .logo-spark { display: none !important; }
 
-          /* ── CRITICAL FIX: Force-hide the absolute desktop badges on mobile ──
-             Framer Motion overrides display via inline style, so we use
-             visibility + pointer-events instead of display:none to guarantee
-             they never appear on mobile and never overlap the logo. */
           .badge-desktop {
             visibility: hidden !important;
             opacity: 0 !important;
@@ -366,7 +352,6 @@ export default function HeroSection() {
       `}</style>
 
       <section className="relative min-h-screen bg-gradient-to-br from-[#060c1a] via-[#0a1228] to-[#07091a] overflow-hidden flex items-center">
-
         {/* ─── Animated grid background ─── */}
         <div className="absolute inset-0 opacity-[0.07]">
           <div
@@ -374,19 +359,29 @@ export default function HeroSection() {
             style={{
               backgroundImage: `linear-gradient(rgba(99,102,241,0.5) 1px, transparent 1px),
                                 linear-gradient(90deg, rgba(99,102,241,0.5) 1px, transparent 1px)`,
-              backgroundSize: '60px 60px',
+              backgroundSize: "60px 60px",
             }}
           />
         </div>
 
         {/* ─── Big radial orbs ─── */}
         <div className="absolute top-[-180px] right-[-180px] w-[640px] h-[640px] bg-blue-600/20 rounded-full blur-[200px] animate-orb-pulse" />
-        <div className="absolute bottom-[-200px] left-[-180px] w-[540px] h-[540px] bg-indigo-600/20 rounded-full blur-[180px] animate-orb-pulse" style={{ animationDelay: '3s' }} />
+        <div
+          className="absolute bottom-[-200px] left-[-180px] w-[540px] h-[540px] bg-indigo-600/20 rounded-full blur-[180px] animate-orb-pulse"
+          style={{ animationDelay: "3s" }}
+        />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-cyan-600/6 rounded-full blur-[220px]" />
 
         {/* ─── Floating particles ─── */}
-        {PARTICLES.map(p => (
-          <Particle key={p.id} x={p.x} y={p.y} size={p.size} delay={p.delay} duration={p.duration} />
+        {PARTICLES.map((p) => (
+          <Particle
+            key={p.id}
+            x={p.x}
+            y={p.y}
+            size={p.size}
+            delay={p.delay}
+            duration={p.duration}
+          />
         ))}
 
         {/* ─── Horizontal line accents ─── */}
@@ -396,72 +391,113 @@ export default function HeroSection() {
         {/* ─── Main content ─── */}
         <div className="relative z-10 container mx-auto px-6 lg:px-12 pt-28 sm:pt-32 lg:pt-24 pb-20">
           <div className="hero-grid grid lg:grid-cols-2 gap-16 items-center">
-
             {/* ══ LEFT CONTENT ══ */}
             <div className="hero-text-col space-y-8">
-
               {/* Badge */}
               <div
-                className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 backdrop-blur-sm badge-pop ${mounted ? '' : 'opacity-0'}`}
-                style={{ animationDelay: '0.1s' }}
+                className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 backdrop-blur-sm badge-pop ${mounted ? "" : "opacity-0"}`}
+                style={{ animationDelay: "0.1s" }}
               >
                 <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-                <span className="text-sm font-medium text-indigo-300 tracking-widest uppercase">Registration Open</span>
+                <span className="text-sm font-medium text-indigo-300 tracking-widest uppercase">
+                  Registration Open
+                </span>
               </div>
 
               {/* Title */}
-              <div className={`slide-up ${mounted ? '' : 'opacity-0'}`} style={{ animationDelay: '0.2s' }}>
-                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black leading-none tracking-tighter text-white" style={{ fontFamily: "'Trebuchet MS', sans-serif" }}>
+              <div
+                className={`slide-up ${mounted ? "" : "opacity-0"}`}
+                style={{ animationDelay: "0.2s" }}
+              >
+                <h1
+                  className="text-5xl sm:text-6xl lg:text-7xl font-black leading-none tracking-tighter text-white"
+                  style={{ fontFamily: "'Trebuchet MS', sans-serif" }}
+                >
                   Ignition
                   <br />
-                  <span className="shimmer-text animate-shimmer">HackVerse</span>
+                  <span className="shimmer-text animate-shimmer">
+                    HackVerse
+                  </span>
                   <br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">2026</span>
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">
+                    2026
+                  </span>
                 </h1>
               </div>
 
               {/* Typewriter subheading */}
-              <div className={`text-xl sm:text-2xl font-semibold text-gray-200 slide-up ${mounted ? '' : 'opacity-0'}`} style={{ animationDelay: '0.35s' }}>
-                Where developers{' '}
-                <Typewriter words={['build the future.', 'ignite ideas.', 'ship in 24hrs.', 'change the world.']} />
+              <div
+                className={`text-xl sm:text-2xl font-semibold text-gray-200 slide-up ${mounted ? "" : "opacity-0"}`}
+                style={{ animationDelay: "0.35s" }}
+              >
+                Where developers{" "}
+                <Typewriter
+                  words={[
+                    "build the future.",
+                    "ignite ideas.",
+                    "ship in 24hrs.",
+                    "change the world.",
+                  ]}
+                />
               </div>
 
               {/* Description */}
-              <p className={`text-lg sm:text-2xl text-cyan-400  max-w-md leading-relaxed slide-up ${mounted ? '' : 'opacity-0'}`} style={{ animationDelay: '0.5s' }}>
-                A 24-hour coding marathon where ideas ignite, innovation thrives,
-                and developers collaborate to build solutions that matter.
+              <p
+                className={`text-lg sm:text-2xl text-white-400  max-w-md leading-relaxed slide-up ${mounted ? "" : "opacity-0"}`}
+                style={{ animationDelay: "0.5s" }}
+              >
+                A 24-hour coding marathon where ideas ignite, innovation
+                thrives, and developers collaborate to build solutions that
+                matter.
               </p>
 
               {/* Stats row */}
-              <div className={`flex gap-8 slide-up ${mounted ? '' : 'opacity-0'}`} style={{ animationDelay: '0.6s' }}>
+              <div
+                className={`flex gap-8 slide-up ${mounted ? "" : "opacity-0"}`}
+                style={{ animationDelay: "0.6s" }}
+              >
                 {[
-                  { value: 500, suffix: '+', label: 'Hackers' },
-                  { value: 50,  suffix: 'k+', label: 'Prize Pool' },
-                  { value: 24,  suffix: 'h',  label: 'Hackathon' },
+                  { value: 500, suffix: "+", label: "Hackers" },
+                  { value: 1.8, suffix: "lac", label: "Prize Pool" },
+                  { value: 24, suffix: "h", label: "Hackathon" },
                 ].map(({ value, suffix, label }) => (
                   <div key={label} className="text-center">
                     <div className="text-2xl font-extrabold text-white">
                       <Counter end={value} suffix={suffix} />
                     </div>
-                    <div className="text-xs text-cyan-500  uppercase tracking-widest mt-0.5">{label}</div>
+                    <div className="text-xs text-cyan-500  uppercase tracking-widest mt-0.5">
+                      {label}
+                    </div>
                   </div>
                 ))}
               </div>
 
               {/* CTA Buttons */}
-              <div className={`flex flex-col sm:flex-row gap-4 pt-2 slide-up ${mounted ? '' : 'opacity-0'}`} style={{ animationDelay: '0.75s' }}>
-                <button className="btn-primary group relative px-8 py-3.5 rounded-xl  bg-gradient-to-r from-blue-500 to-indigo-500 text-green-500 font-bold text-base shadow-[0_0_30px_rgba(99,102,241,0.35)] hover:shadow-[0_0_50px_rgba(99,102,241,0.55)] hover:scale-[1.04] active:scale-[0.98] transition-all duration-300">
+              <div
+                className={`flex flex-col sm:flex-row gap-4 pt-2 slide-up ${mounted ? "" : "opacity-0"}`}
+                style={{ animationDelay: "0.75s" }}
+              >
+                <Link
+                  href="/register"
+                  className="btn-primary group relative px-8 py-3.5 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-bold text-base shadow-[0_0_30px_rgba(99,102,241,0.35)] hover:shadow-[0_0_50px_rgba(99,102,241,0.55)] hover:scale-[1.04] active:scale-[0.98] transition-all duration-300 inline-flex"
+                >
                   <span className="relative z-10 flex items-center gap-2">
                     Register Now
-                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    <svg
+                      className="w-4 h-4 group-hover:translate-x-1 transition-transform"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M17 8l4 4m0 0l-4 4m4-4H3"
+                      />
                     </svg>
                   </span>
-                </button>
-                <button className="group px-8 py-3.5 rounded-xl border border-white/15 backdrop-blur-md bg-white/5 text-emerald-500 font-bold text-base hover:bg-white/10 hover:border-white/30 hover:scale-[1.04] active:scale-[0.98] transition-all duration-300 flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-yellow-400 animate-pulse" />
-                  View Prizes
-                </button>
+                </Link>
               </div>
             </div>
 
@@ -470,29 +506,33 @@ export default function HeroSection() {
               className="hero-logo-col relative flex flex-col items-center lg:items-end"
               initial={{ opacity: 0, x: 48 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.85, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              transition={{
+                duration: 0.85,
+                delay: 0.3,
+                ease: [0.22, 1, 0.36, 1],
+              }}
             >
-              <div className="relative w-full max-w-[500px] lg:max-w-[500px] sm:max-w-[360px]" style={{ maxWidth: 'min(500px, 80vw)' }}>
-
-                {/* ── Energy beams ── */}
-                <EnergyBeam radius={280} mobileRadius={110} duration={7}  color="rgba(99,102,241,0.75)"  startAngle={0}   />
-                <EnergyBeam radius={300} mobileRadius={120} duration={11} color="rgba(56,189,248,0.60)"  startAngle={120} />
-                <EnergyBeam radius={260} mobileRadius={100} duration={9}  color="rgba(167,139,250,0.65)" startAngle={240} />
-
+              <div
+                className="relative w-full max-w-[500px] lg:max-w-[500px] sm:max-w-[360px]"
+                style={{ maxWidth: "min(500px, 80vw)" }}
+              >
                 {/* ── CSS spinning rings ── */}
                 <div className="ring-outer absolute inset-[-32px] rounded-full border border-indigo-500/15 animate-ring-spin" />
                 <div className="ring-mid absolute inset-[-64px] rounded-full border border-blue-500/10 animate-ring-rev" />
                 <div
                   className="ring-inner absolute inset-[-20px] rounded-full animate-ring-spin"
-                  style={{ border: '1px dashed rgba(99,102,241,0.18)', animationDuration: '24s' }}
+                  style={{
+                    border: "1px dashed rgba(99,102,241,0.18)",
+                    animationDuration: "24s",
+                  }}
                 />
 
                 {/* ── Orbit dots ── */}
                 {[
-                  { deg: 0,   color: '#60a5fa', size: 10 },
-                  { deg: 90,  color: '#818cf8', size: 7  },
-                  { deg: 180, color: '#34d399', size: 10 },
-                  { deg: 270, color: '#a78bfa', size: 7  },
+                  { deg: 0, color: "#60a5fa", size: 10 },
+                  { deg: 90, color: "#818cf8", size: 7 },
+                  { deg: 180, color: "#34d399", size: 10 },
+                  { deg: 270, color: "#a78bfa", size: 7 },
                 ].map(({ deg, color, size }, i) => (
                   <motion.div
                     key={i}
@@ -500,8 +540,8 @@ export default function HeroSection() {
                     style={{
                       width: size,
                       height: size,
-                      top: '50%',
-                      left: '50%',
+                      top: "50%",
+                      left: "50%",
                       marginTop: -(size / 2),
                       marginLeft: -(size / 2),
                       background: color,
@@ -515,16 +555,35 @@ export default function HeroSection() {
                       opacity: [0.7, 1, 0.7],
                     }}
                     transition={{
-                      rotate:  { duration: 12, repeat: Infinity, ease: 'linear' },
-                      scale:   { duration: 2.5, repeat: Infinity, ease: 'easeInOut', delay: i * 0.6 },
-                      opacity: { duration: 2.5, repeat: Infinity, ease: 'easeInOut', delay: i * 0.6 },
+                      rotate: {
+                        duration: 12,
+                        repeat: Infinity,
+                        ease: "linear",
+                      },
+                      scale: {
+                        duration: 2.5,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                        delay: i * 0.6,
+                      },
+                      opacity: {
+                        duration: 2.5,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                        delay: i * 0.6,
+                      },
                     }}
                   />
                 ))}
 
                 {/* ── Sparks (hidden on mobile via .logo-spark CSS) ── */}
                 {SPARK_ANGLES.map((s, i) => (
-                  <LogoSpark key={i} angle={s.angle} delay={s.delay} radius={s.radius} />
+                  <LogoSpark
+                    key={i}
+                    angle={s.angle}
+                    delay={s.delay}
+                    radius={s.radius}
+                  />
                 ))}
 
                 {/* ── Glow corona ── */}
@@ -552,65 +611,13 @@ export default function HeroSection() {
 
                 {/* ══ DESKTOP-ONLY absolute badges ══ */}
 
-                {/* Prize Pool badge */}
-                <motion.div
-                  className="absolute top-4 right-[-16px] z-20 px-3 py-2 rounded-xl bg-[#0e1630]/80 border border-indigo-500/30 backdrop-blur-md shadow-xl hidden lg:block"
-                  initial={{ opacity: 0, scale: 0.75, x: 12 }}
-                  animate={{ opacity: 1, scale: 1, x: 0 }}
-                  transition={{ delay: 1.0, duration: 0.5, type: 'spring', bounce: 0.45 }}
-                  whileHover={{ scale: 1.06, boxShadow: '0 0 20px rgba(99,102,241,0.4)' }}
-                  style={{ display: undefined }}
-                >
-                  <div className="flex items-center gap-2">
-                    <span className="text-lg">🏆</span>
-                    <div>
-                      <div className="text-xs text-gray-400">Prize Pool</div>
-                      <div className="text-sm font-bold text-white">$50,000+</div>
-                    </div>
-                  </div>
-                </motion.div>
-
-                {/* Duration badge */}
-                <motion.div
-                  className="absolute bottom-8 left-[-16px] z-20 px-3 py-2 rounded-xl bg-[#0e1630]/80 border border-blue-500/30 backdrop-blur-md shadow-xl hidden lg:block"
-                  initial={{ opacity: 0, scale: 0.75, x: -12 }}
-                  animate={{ opacity: 1, scale: 1, x: 0 }}
-                  transition={{ delay: 1.2, duration: 0.5, type: 'spring', bounce: 0.45 }}
-                  whileHover={{ scale: 1.06, boxShadow: '0 0 20px rgba(59,130,246,0.4)' }}
-                  style={{ display: undefined }}
-                >
-                  <div className="flex items-center gap-2">
-                    <span className="text-lg">⚡</span>
-                    <div>
-                      <div className="text-xs text-gray-400">Duration</div>
-                      <div className="text-sm font-bold text-white">24 Hours</div>
-                    </div>
-                  </div>
-                </motion.div>
-
-                {/* Live Soon badge */}
-                <motion.div
-                  className="hidden lg:flex absolute top-[-8px] left-1/2 -translate-x-1/2 z-20 items-center gap-1.5 px-3 py-1 rounded-full bg-red-500/20 border border-red-500/40"
-                  initial={{ opacity: 0, y: -10, scale: 0.8 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{ delay: 1.4, duration: 0.5, type: 'spring', bounce: 0.5 }}
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" />
-                  <span className="text-xs font-bold text-red-300 uppercase tracking-widest">Live Soon</span>
-                </motion.div>
-
               </div>
-
-
-
             </motion.div>
-
           </div>
         </div>
 
         {/* ─── Bottom fade ─── */}
         <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#060c1a] to-transparent" />
-
       </section>
     </>
   );
