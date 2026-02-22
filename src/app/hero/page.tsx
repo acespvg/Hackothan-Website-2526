@@ -443,7 +443,7 @@ export default function HeroSection() {
 
               {/* Description */}
               <p
-                className={`text-lg sm:text-2xl text-cyan-400  max-w-md leading-relaxed slide-up ${mounted ? "" : "opacity-0"}`}
+                className={`text-lg sm:text-2xl text-white-400  max-w-md leading-relaxed slide-up ${mounted ? "" : "opacity-0"}`}
                 style={{ animationDelay: "0.5s" }}
               >
                 A 24-hour coding marathon where ideas ignite, innovation
@@ -458,7 +458,7 @@ export default function HeroSection() {
               >
                 {[
                   { value: 500, suffix: "+", label: "Hackers" },
-                  { value: 50, suffix: "k+", label: "Prize Pool" },
+                  { value: 1.8, suffix: "lac", label: "Prize Pool" },
                   { value: 24, suffix: "h", label: "Hackathon" },
                 ].map(({ value, suffix, label }) => (
                   <div key={label} className="text-center">
@@ -498,10 +498,6 @@ export default function HeroSection() {
                     </svg>
                   </span>
                 </Link>
-                <button className="group px-8 py-3.5 rounded-xl border border-white/15 backdrop-blur-md bg-white/5 text-emerald-500 font-bold text-base hover:bg-white/10 hover:border-white/30 hover:scale-[1.04] active:scale-[0.98] transition-all duration-300 flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-yellow-400 animate-pulse" />
-                  View Prizes
-                </button>
               </div>
             </div>
 
@@ -615,61 +611,6 @@ export default function HeroSection() {
 
                 {/* ══ DESKTOP-ONLY absolute badges ══ */}
 
-                {/* Prize Pool badge */}
-                <motion.div
-                  className="absolute top-4 right-[-16px] z-20 px-3 py-2 rounded-xl bg-[#0e1630]/80 border border-indigo-500/30 backdrop-blur-md shadow-xl hidden lg:block"
-                  initial={{ opacity: 0, scale: 0.75, x: 12 }}
-                  animate={{ opacity: 1, scale: 1, x: 0 }}
-                  transition={{
-                    delay: 1.0,
-                    duration: 0.5,
-                    type: "spring",
-                    bounce: 0.45,
-                  }}
-                  whileHover={{
-                    scale: 1.06,
-                    boxShadow: "0 0 20px rgba(99,102,241,0.4)",
-                  }}
-                  style={{ display: undefined }}
-                >
-                  <div className="flex items-center gap-2">
-                    <span className="text-lg">🏆</span>
-                    <div>
-                      <div className="text-xs text-gray-400">Prize Pool</div>
-                      <div className="text-sm font-bold text-white">
-                        ₹1,80,000
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-
-                {/* Duration badge */}
-                <motion.div
-                  className="absolute bottom-8 left-[-16px] z-20 px-3 py-2 rounded-xl bg-[#0e1630]/80 border border-blue-500/30 backdrop-blur-md shadow-xl hidden lg:block"
-                  initial={{ opacity: 0, scale: 0.75, x: -12 }}
-                  animate={{ opacity: 1, scale: 1, x: 0 }}
-                  transition={{
-                    delay: 1.2,
-                    duration: 0.5,
-                    type: "spring",
-                    bounce: 0.45,
-                  }}
-                  whileHover={{
-                    scale: 1.06,
-                    boxShadow: "0 0 20px rgba(59,130,246,0.4)",
-                  }}
-                  style={{ display: undefined }}
-                >
-                  <div className="flex items-center gap-2">
-                    <span className="text-lg">⚡</span>
-                    <div>
-                      <div className="text-xs text-gray-400">Duration</div>
-                      <div className="text-sm font-bold text-white">
-                        24 Hours
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
               </div>
             </motion.div>
           </div>

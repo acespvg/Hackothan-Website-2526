@@ -1,242 +1,303 @@
-'use client';
-
-import { useState, useEffect, useRef } from 'react';
-import { motion } from 'motion/react';
-
-const SPONSOR_TIERS = [
-    {
-        name: 'Gold Sponsors',
-        color: '#fbbf24', // Amber/Gold
-        softColor: 'rgba(251, 191, 36, 0.1)',
-        cardSize: 'h-48 w-full md:w-80',
-        gridCols: 'grid-cols-1 md:grid-cols-2',
-        sponsors: [
-            { name: 'Tech Giant', logoText: 'LOGO 1' },
-            { name: 'Cloud Hero', logoText: 'LOGO 2' },
-        ]
-    },
-    {
-        name: 'Silver Sponsors',
-        color: '#94a3b8', // Slate/Silver
-        softColor: 'rgba(148, 163, 184, 0.1)',
-        cardSize: 'h-36 w-full md:w-64',
-        gridCols: 'grid-cols-2 md:grid-cols-3',
-        sponsors: [
-            { name: 'Innovate AI', logoText: 'LOGO 3' },
-            { name: 'Future Systems', logoText: 'LOGO 4' },
-            { name: 'Soft Solutions', logoText: 'LOGO 5' },
-        ]
-    },
-    {
-        name: 'Community Partners',
-        color: '#38bdf8', // Sky/Community
-        softColor: 'rgba(56, 189, 248, 0.1)',
-        cardSize: 'h-24 w-full md:w-48',
-        gridCols: 'grid-cols-2 md:grid-cols-4',
-        sponsors: [
-            { name: 'Dev Community', logoText: 'LOGO 6' },
-            { name: 'College Hub', logoText: 'LOGO 7' },
-            { name: 'Code Base', logoText: 'LOGO 8' },
-            { name: 'Tech Forum', logoText: 'LOGO 9' },
-        ]
-    }
+'use client'
+import { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
+const goldSponsors = [
+  { name: 'Sponsor 1', image: '/sponser1.jpg' },
+  { name: 'Sponsor 2', image: '/sponser2.png' },
 ];
 
-function useInView(threshold = 0.1) {
-    const ref = useRef<HTMLDivElement>(null);
-    const [inView, setInView] = useState(false);
+const silverSponsors = [
+  { name: 'Sponsor 3', image: '/sponser3.png' },
+  { name: 'Sponsor 4', image: '/sponser4.jpg' },
+  { name: 'Sponsor 5', image: '/sponser5.png' },
+];
 
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (entry.isIntersecting) {
-                    setInView(true);
-                    observer.disconnect();
-                }
-            },
-            { threshold }
-        );
-        if (ref.current) observer.observe(ref.current);
-        return () => observer.disconnect();
-    }, [threshold]);
+const communityPartners = [
+  { name: 'Sponsor 6', image: '/sponser6.jpg' },
+  { name: 'Sponsor 7', image: '/sponser7.jpg' },
+];
 
-    return [ref, inView] as const;
+const goldHover    = { glow: 'rgba(234,179,8,0.55)',   bg: 'rgba(234,179,8,0.07)',   border: 'rgba(234,179,8,0.85)'   };
+const silverHover  = { glow: 'rgba(148,163,184,0.45)', bg: 'rgba(148,163,184,0.06)', border: 'rgba(148,163,184,0.75)' };
+const partnerHover = { glow: 'rgba(34,211,238,0.4)',   bg: 'rgba(34,211,238,0.06)',  border: 'rgba(34,211,238,0.75)'  };
+
+const css = `
+  /* ── Grid layouts ── */
+  .sg-gold {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  .sg-silver {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .sg-community {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    width: 66.66%;
+    margin: 0 auto;
+  }
+
+  /* ── Card: aspect-ratio keeps height proportional to width ── */
+  .sponsor-card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    cursor: pointer;
+    overflow: hidden;
+    aspect-ratio: 16 / 6;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0;
+  }
+
+  .sponsor-card img {
+    max-width: 55%;
+    max-height: 65%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
+    transition: filter 0.22s ease;
+    pointer-events: none;
+  }
+
+  /* ── Tablet ── */
+  @media (max-width: 900px) {
+    .sg-silver {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .sg-community {
+      width: 80%;
+    }
+    .sponsor-card {
+      aspect-ratio: 16 / 7;
+    }
+    .sponsor-card img {
+      max-width: 60%;
+      max-height: 70%;
+    }
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 600px) {
+    .sg-gold,
+    .sg-silver,
+    .sg-community {
+      grid-template-columns: 1fr;
+      gap: 12px;
+      width: 100%;
+    }
+    .sponsor-card {
+      aspect-ratio: 16 / 6;
+    }
+    .sponsor-card img {
+      max-width: 55%;
+      max-height: 65%;
+    }
+  }
+`;
+
+function SectionLabel({ label, color }: { label: string; color: string }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '20px' }}>
+      <span style={{
+        fontSize: '11px', fontWeight: 700, letterSpacing: '3.5px',
+        textTransform: 'uppercase', fontFamily: "'Trebuchet MS', sans-serif",
+        color, whiteSpace: 'nowrap',
+      }}>
+        {label}
+      </span>
+      <div style={{ flex: 1, height: '1px', background: `linear-gradient(90deg, ${color}55, transparent)` }} />
+    </div>
+  );
 }
 
-function SponsorCard({ sponsor, color, softColor, size }: {
-    sponsor: { name: string; logoText: string };
-    color: string;
-    softColor: string;
-    size: string;
+function SponsorCard({
+  sponsor, hoverStyle, visible, delay = 0,
+}: {
+  sponsor: { name: string; image: string };
+  hoverStyle: { glow: string; bg: string; border: string };
+  visible: boolean;
+  delay?: number;
 }) {
-    const [hovered, setHovered] = useState(false);
+  const [hovered, setHovered] = useState(false);
 
-    return (
-        <motion.div
-            onMouseEnter={() => setHovered(true)}
-            onMouseLeave={() => setHovered(false)}
-            className={`relative ${size} rounded-2xl flex flex-col items-center justify-center p-4 transition-all duration-500 overflow-hidden cursor-default`}
-            style={{
-                background: hovered ? `${softColor}` : 'rgba(255, 255, 255, 0.02)',
-                border: `1px solid ${hovered ? color + '4d' : 'rgba(255, 255, 255, 0.05)'}`,
-                backdropFilter: 'blur(12px)',
-                boxShadow: hovered ? `0 20px 40px ${color}1a` : 'none'
-            }}
-            whileHover={{ y: -5, scale: 1.02 }}
-        >
-            {/* Top shimmer line */}
-            <div
-                className="absolute top-0 left-0 right-0 h-px transition-opacity duration-500"
-                style={{
-                    background: `linear-gradient(90deg, transparent, ${color}, transparent)`,
-                    opacity: hovered ? 1 : 0.2
-                }}
-            />
-
-            {/* Dummy Logo Box */}
-            <div
-                className="w-20 h-20 md:w-24 md:h-24 rounded-xl flex items-center justify-center mb-3 transition-transform duration-500"
-                style={{
-                    background: `linear-gradient(135deg, ${color}33, ${color}0d)`,
-                    border: `1px solid ${color}4d`,
-                    transform: hovered ? 'scale(1.1)' : 'scale(1)'
-                }}
-            >
-                <span className="text-white font-black text-xs md:text-sm tracking-widest opacity-60">
-                    {sponsor.logoText}
-                </span>
-            </div>
-
-            <span
-                className="text-xs md:text-sm font-bold tracking-wider font-['Trebuchet_MS',_sans-serif]"
-                style={{ color: hovered ? '#fff' : '#94a3b8' }}
-            >
-                {sponsor.name}
-            </span>
-
-            {/* Subtle corner glow */}
-            <div
-                className="absolute -bottom-10 -right-10 w-24 h-24 rounded-full blur-3xl pointer-events-none opacity-20"
-                style={{ background: color }}
-            />
-        </motion.div>
-    );
+  return (
+    <div
+      className="sponsor-card"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        border: `1px solid ${hovered ? hoverStyle.border : 'rgba(255,255,255,0.09)'}`,
+        background: hovered ? hoverStyle.bg : 'rgba(255,255,255,0.04)',
+        boxShadow: hovered
+          ? `0 0 32px 4px ${hoverStyle.glow}, inset 0 1px 0 rgba(255,255,255,0.09)`
+          : '0 4px 20px rgba(0,0,0,0.55)',
+        transition: `border 0.22s ease, background 0.22s ease, box-shadow 0.22s ease, opacity 0.6s ease ${delay}ms, transform 0.6s ease ${delay}ms`,
+        opacity: visible ? 1 : 0,
+        transform: visible ? 'translateY(0)' : 'translateY(28px)',
+      }}
+    >
+      {/* Top shimmer */}
+      <div style={{
+        position: 'absolute', top: 0, left: '20%', right: '20%', height: '1px',
+        background: hovered
+          ? `linear-gradient(90deg, transparent, ${hoverStyle.border}, transparent)`
+          : 'transparent',
+        transition: 'background 0.22s ease',
+      }} />
+      <img
+        src={sponsor.image}
+        alt={sponsor.name}
+        style={{
+          filter: hovered
+            ? 'brightness(1.12) saturate(1.08) drop-shadow(0 0 8px rgba(255,255,255,0.15))'
+            : 'brightness(0.88) saturate(0.8)',
+        }}
+      />
+    </div>
+  );
 }
 
-export default function Sponsors() {
-    const [ref, inView] = useInView();
+export default function Sponser() {
+  const [visible, setVisible] = useState(false);
+  const sectionRef = useRef<HTMLDivElement>(null);
 
-    return (
-        <section
-            ref={ref}
-            id="sponsors"
-            className="relative pt-12 pb-24 overflow-hidden"
-            style={{ background: 'linear-gradient(180deg, #060c1a 0%, #080f20 50%, #060c1a 100%)' }}
-        >
-            {/* Background Animated Grid */}
-            <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
-                <div
-                    className="absolute inset-0"
-                    style={{
-                        backgroundImage: `linear-gradient(rgba(99, 102, 241, 0.5) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(99, 102, 241, 0.5) 1px, transparent 1px)`,
-                        backgroundSize: '80px 80px',
-                    }}
-                />
-            </div>
-
-            {/* Decorative Orbs */}
-            <div className="absolute top-1/4 -left-20 w-96 h-96 bg-indigo-500/10 rounded-full blur-[100px] pointer-events-none animate-pulse" />
-            <div className="absolute bottom-1/4 -right-20 w-80 h-80 bg-blue-500/5 rounded-full blur-[80px] pointer-events-none" />
-
-            <div className="container mx-auto px-6 relative z-10">
-                {/* Thin top divider */}
-                <div className="w-full h-px bg-gradient-to-r from-transparent via-white/5 to-transparent mb-16" />
-
-                <div className="text-center mb-12">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={inView ? { opacity: 1, y: 0 } : {}}
-                        transition={{ duration: 0.6 }}
-                        className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 mb-6"
-                    >
-                        <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />
-                        <span className="text-[11px] font-bold text-indigo-300 uppercase tracking-[0.2em] font-['Trebuchet_MS',_sans-serif]">
-                            Partnerships
-                        </span>
-                    </motion.div>
-
-                    <motion.h2
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={inView ? { opacity: 1, y: 0 } : {}}
-                        transition={{ duration: 0.6, delay: 0.1 }}
-                        className="text-3xl md:text-5xl font-black text-white mb-6 font-['Trebuchet_MS',_sans-serif] tracking-tight"
-                    >
-                        Our Valuable <span className="bg-gradient-to-r from-indigo-400 via-blue-400 to-purple-500 bg-clip-text text-transparent">Sponsors</span>
-                    </motion.h2>
-
-                    <motion.p
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={inView ? { opacity: 1, y: 0 } : {}}
-                        transition={{ duration: 0.6, delay: 0.2 }}
-                        className="text-slate-500 max-w-sm mx-auto font-['Trebuchet_MS',_sans-serif]"
-                    >
-                        Empowering innovation through strategic collaborations.
-                    </motion.p>
-                </div>
-
-                {/* Tiers List */}
-                <div className="space-y-24 flex flex-col items-center">
-                    {SPONSOR_TIERS.map((tier, ti) => (
-                        <div key={ti} className="w-full flex flex-col items-center">
-                            <motion.div
-                                initial={{ opacity: 0, x: -20 }}
-                                animate={inView ? { opacity: 1, x: 0 } : {}}
-                                transition={{ duration: 0.6, delay: 0.3 + ti * 0.1 }}
-                                className="flex items-center gap-4 mb-10 w-full max-w-5xl px-4"
-                            >
-                                <h3
-                                    className="text-sm font-black uppercase tracking-[0.3em] font-['Trebuchet_MS',_sans-serif] whitespace-nowrap"
-                                    style={{ color: tier.color }}
-                                >
-                                    {tier.name}
-                                </h3>
-                                <div className="h-px w-full" style={{ background: `linear-gradient(90deg, ${tier.color}33, transparent)` }} />
-                            </motion.div>
-
-                            <div className={`grid ${tier.gridCols} gap-6 md:gap-10 w-full max-w-6xl px-4 justify-items-center`}>
-                                {tier.sponsors.map((sponsor, si) => (
-                                    <SponsorCard
-                                        key={si}
-                                        sponsor={sponsor}
-                                        color={tier.color}
-                                        softColor={tier.softColor}
-                                        size={tier.cardSize}
-                                    />
-                                ))}
-                            </div>
-                        </div>
-                    ))}
-                </div>
-
-                {/* CTA Line */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={inView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ duration: 0.6, delay: 0.8 }}
-                    className="mt-32 text-center"
-                >
-                    <div className="inline-flex flex-col md:flex-row items-center gap-4 py-6 px-10 rounded-2xl border border-white/5 bg-white/[0.02] backdrop-blur-md">
-                        <span className="text-slate-400 font-['Trebuchet_MS',_sans-serif]">Interested in sponsoring?</span>
-                        <a href="mailto:contact@hackverse.com" className="text-indigo-400 font-bold hover:text-indigo-300 transition-colors underline underline-offset-4 decoration-indigo-400/30">
-                            Contact the organizing team
-                        </a>
-                    </div>
-                </motion.div>
-
-                {/* Bottom accent line */}
-                <div className="mt-20 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-            </div>
-        </section>
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setVisible(true); },
+      { threshold: 0.1 }
     );
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <>
+      <style>{css}</style>
+      <section
+        ref={sectionRef}
+        style={{
+          width: '100%',
+          boxSizing: 'border-box',
+          padding: 'clamp(32px, 5vw, 72px) clamp(16px, 3vw, 36px)',
+          background: 'linear-gradient(135deg, #0b0f1e 0%, #080c18 60%, #060914 100%)',
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            padding: 'clamp(24px, 3.5vw, 52px) clamp(18px, 3.5vw, 52px) clamp(28px, 4vw, 60px)',
+            borderRadius: '24px',
+            background: 'linear-gradient(160deg, rgba(255,255,255,0.04) 0%, rgba(99,102,241,0.04) 100%)',
+            border: '1px solid rgba(99,102,241,0.18)',
+            backdropFilter: 'blur(16px)',
+            boxShadow: '0 0 100px rgba(99,102,241,0.09), inset 0 1px 0 rgba(255,255,255,0.06)',
+            position: 'relative',
+            overflow: 'hidden',
+            width: '100%',
+            boxSizing: 'border-box',
+            transition: 'opacity 0.8s ease, transform 0.8s ease',
+            opacity: visible ? 1 : 0,
+            transform: visible ? 'translateY(0)' : 'translateY(36px)',
+          }}
+        >
+          <div style={{
+            position: 'absolute', top: 0, left: '20%', right: '20%', height: '1px',
+            background: 'linear-gradient(90deg,transparent,rgba(99,102,241,0.65),rgba(56,189,248,0.45),transparent)',
+          }} />
+          <div style={{
+            position: 'absolute', top: '-80px', right: '-80px', width: '260px', height: '260px',
+            borderRadius: '50%', pointerEvents: 'none',
+            background: 'radial-gradient(circle, rgba(99,102,241,0.1) 0%, transparent 70%)',
+          }} />
+          <div style={{
+            position: 'absolute', bottom: '-80px', left: '-80px', width: '240px', height: '240px',
+            borderRadius: '50%', pointerEvents: 'none',
+            background: 'radial-gradient(circle, rgba(56,189,248,0.07) 0%, transparent 70%)',
+          }} />
+
+          {/* Header */}
+          <div style={{
+            display: 'flex', flexDirection: 'column', alignItems: 'center',
+            gap: '10px', marginBottom: 'clamp(24px, 3vw, 48px)', alignSelf: 'center',
+            opacity: visible ? 1 : 0, transition: 'opacity 0.7s ease 0.1s',
+            textAlign: 'center',
+          }}>
+            <div style={{
+              display: 'inline-flex', alignItems: 'center', gap: '7px',
+              padding: '5px 16px', borderRadius: '999px',
+              background: 'rgba(99,102,241,0.11)', border: '1px solid rgba(99,102,241,0.28)',
+              marginBottom: '4px',
+            }}>
+              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#6366f1', display: 'block' }} />
+              <span style={{ fontSize: '10px', letterSpacing: '2.5px', color: '#818cf8', fontWeight: 700, fontFamily: "'Trebuchet MS', sans-serif" }}>
+                PARTNERSHIPS
+              </span>
+            </div>
+            <div style={{
+              fontSize: 'clamp(20px, 3vw, 32px)', fontWeight: 700,
+              fontFamily: "'Trebuchet MS', sans-serif", color: '#fff',
+            }}>
+              Our Valuable{' '}
+              <span style={{
+                background: 'linear-gradient(90deg, #818cf8, #a78bfa)',
+                WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+              }}>
+                Sponsors
+              </span>
+            </div>
+            <p style={{
+              fontSize: 'clamp(11px, 1.5vw, 14px)', color: 'rgba(255,255,255,0.38)',
+              fontFamily: "'Trebuchet MS', sans-serif", textAlign: 'center', margin: 0,
+            }}>
+              Empowering innovation through strategic collaborations.
+            </p>
+          </div>
+
+          {/* Gold */}
+          <div style={{ marginBottom: 'clamp(20px, 3vw, 40px)' }}>
+            <SectionLabel label="Gold Sponsors" color="#eab308" />
+            <div className="sg-gold">
+              {goldSponsors.map((s, i) => (
+                <SponsorCard key={i} sponsor={s} hoverStyle={goldHover} visible={visible} delay={i * 80} />
+              ))}
+            </div>
+          </div>
+
+          {/* Silver */}
+          <div style={{ marginBottom: 'clamp(20px, 3vw, 40px)' }}>
+            <SectionLabel label="Silver Sponsors" color="#94a3b8" />
+            <div className="sg-silver">
+              {silverSponsors.map((s, i) => (
+                <SponsorCard key={i} sponsor={s} hoverStyle={silverHover} visible={visible} delay={160 + i * 70} />
+              ))}
+            </div>
+          </div>
+
+          {/* Community */}
+          <div>
+            <SectionLabel label="Community Partners" color="#22d3ee" />
+            <div className="sg-community">
+              {communityPartners.map((s, i) => (
+                <SponsorCard key={i} sponsor={s} hoverStyle={partnerHover} visible={visible} delay={370 + i * 70} />
+              ))}
+            </div>
+          </div>
+
+          <div style={{
+            position: 'absolute', bottom: 0, left: '30%', right: '30%', height: '1px',
+            background: 'linear-gradient(90deg,transparent,rgba(99,102,241,0.35),transparent)',
+          }} />
+        </div>
+      </section>
+    </>
+  );
 }
