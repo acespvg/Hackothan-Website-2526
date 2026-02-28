@@ -12,82 +12,129 @@ const transporter = nodemailer.createTransport({
 export async function POST(req: NextRequest) {
   try {
     const { teamName, teamSize, leader, teamMembers } = await req.json();
+    const whatsappGroupLink = process.env.WHATSAPP_GROUP_LINK;
 
-    const whatsappGroupLink = process.env.WHATSAPP_GROUP_LINK || 'https://chat.whatsapp.com/yourlink';
-
-    const membersList = teamMembers.map((m: any, i: number) => `
-      <tr style="border-bottom: 1px solid #b2dfdb;">
-        <td style="padding: 10px; text-align:center;">${i + 2}</td>
-        <td style="padding: 10px;">${m.firstName} ${m.lastName}</td>
-        <td style="padding: 10px;">
-          <a href="mailto:${m.email}" style="color: #007bff; text-decoration: none;">${m.email}</a>
-        </td>
-        <td style="padding: 10px;">${m.instituteName}</td>
-      </tr>
-    `).join('');
+    // 🔥 Members as stacked cards (mobile safe)
+    const membersList = teamMembers
+      .map(
+        (m: any, i: number) => `
+        <div style="padding:16px; border:1px solid #e5e7eb; border-radius:8px; margin-bottom:12px;">
+          <p style="margin:4px 0; font-weight:600;">Member #${i + 2}</p>
+          <p style="margin:4px 0;"><strong>Name:</strong> ${m.firstName} ${m.lastName}</p>
+          <p style="margin:4px 0; word-break:break-word;">
+            <strong>Email:</strong> 
+            <a href="mailto:${m.email}" style="color:#2563eb; text-decoration:none;">
+              ${m.email}
+            </a>
+          </p>
+          <p style="margin:4px 0;"><strong>Institute:</strong> ${m.instituteName}</p>
+        </div>
+      `
+      )
+      .join('');
 
     await transporter.sendMail({
       from: `"Ignition HackVerse 2026" <${process.env.EMAIL_USER}>`,
       to: leader.email,
-      subject: `✅ Registration Confirmed — Team ${teamName} | Ignition HackVerse 2026`,
+      subject: `🎉 Ignition HackVerse 2026 | Registration Confirmed - Team ${teamName}`,
       html: `
-        <div style="font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; text-align: center;">
-          <div style="background: #ffffff; padding: 30px; border-radius: 10px; max-width: 600px; margin: auto; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
-            <h2 style="color: #2c3e50;">✅ Hackathon Registration Successful!</h2>
-            <p style="font-size: 16px; color: #555;">Dear <strong>${leader.firstName} ${leader.lastName}</strong>,</p>
-            <p style="font-size: 16px; color: #555;">Congratulations! Your team <strong style="color: #27ae60;">${teamName}</strong> has been successfully registered for the hackathon.</p>
+      <div style="font-family:Arial, sans-serif; padding:20px; background-color:#f3f4f6;">
+        <div style="max-width:600px; margin:auto; background:#ffffff; padding:24px; border-radius:12px; border:1px solid #e5e7eb;">
 
-            <hr style="border: 1px solid #ddd;">
+          <h2 style="margin-top:0;">🎉 Registration Confirmed!</h2>
 
-            <h3 style="color: #e67e22;">📢 Join WhatsApp Group:</h3>
-            <p>Stay updated with important announcements. Click below to join our WhatsApp group:</p>
+          <p>Dear <strong>${leader.firstName} ${leader.lastName}</strong>,</p>
+
+          <p>
+            Your team <strong>${teamName}</strong> has been successfully registered for 
+            <strong>Ignition HackVerse 2026</strong>.
+          </p>
+
+          <!-- Team Summary -->
+          <div style="padding:16px; border:1px solid #e5e7eb; border-radius:8px; margin-top:16px;">
+            <p style="margin:4px 0;"><strong>Team Name:</strong> ${teamName}</p>
+            <p style="margin:4px 0;"><strong>Team Size:</strong> ${teamSize}</p>
+          </div>
+
+          <!-- Leader Section -->
+          <h3 style="margin-top:24px;">👤 Team Leader Details</h3>
+          <div style="padding:16px; border:1px solid #e5e7eb; border-radius:8px;">
+            <p style="margin:4px 0;"><strong>Name:</strong> ${leader.firstName} ${leader.lastName}</p>
+            <p style="margin:4px 0; word-break:break-word;">
+              <strong>Email:</strong> 
+              <a href="mailto:${leader.email}" style="color:#2563eb; text-decoration:none;">
+                ${leader.email}
+              </a>
+            </p>
+            <p style="margin:4px 0;"><strong>Institute:</strong> ${leader.instituteName}</p>
+          </div>
+
+          <!-- Members -->
+          <h3 style="margin-top:24px;">👥 Team Members</h3>
+          <div style="margin-top:12px;">
+            ${membersList}
+          </div>
+
+          <!-- WhatsApp Section -->
+          <div style="margin-top:24px; text-align:center;">
+            <p style="margin-bottom:10px; font-weight:600;">
+              📢 Join Official WhatsApp Group
+            </p>
+            <p style="margin-bottom:16px;">
+              Stay updated with important announcements and event instructions.
+            </p>
             <a href="${whatsappGroupLink}"
-               style="display: inline-block; background: #27ae60; color: white; padding: 12px 20px; text-decoration: none; font-size: 16px; font-weight: bold; border-radius: 5px;">
+              style="display:inline-block; background:#16a34a; color:white; padding:12px 20px;
+              text-decoration:none; border-radius:6px; font-weight:600;">
               👉 Join WhatsApp Group
             </a>
+          </div>
 
-            <hr style="border: 1px solid #ddd;">
+          <!-- Important Note -->
+          <div style="margin-top:24px; font-size:14px;">
+            <p>
+              ⚠ <strong>Important:</strong> If your team is not selected for Round 2, 
+              50% of the registration amount will be refunded.
+            </p>
+          </div>
 
-            <h3 style="color: #34495e;">🔹 Team Details:</h3>
-            <div style="background: #ecf0f1; padding: 15px; border-radius: 8px; text-align: left;">
-              <p><strong>🏆 Team Name:</strong> <span style="color: #3498db;">${teamName}</span></p>
-              <p><strong>👥 Team Size:</strong> <span style="color: #e74c3c; font-size: 18px;">${teamSize}</span></p>
-            </div>
+          <!-- Contact Section -->
+          <hr style="margin:24px 0; border:none; border-top:1px solid #e5e7eb;" />
 
-            <h3 style="color: #34495e;">👤 Leader Details:</h3>
-            <div style="background: #f9e79f; padding: 15px; border-radius: 8px; text-align: left;">
-              <p><strong>📌 Name:</strong> ${leader.firstName} ${leader.lastName}</p>
-              <p><strong>✉ Email:</strong> <a href="mailto:${leader.email}" style="color: #007bff; text-decoration: none;">${leader.email}</a></p>
-              <p><strong>🏛 Institute:</strong> ${leader.instituteName}</p>
-            </div>
-
-            <h3 style="color: #34495e;">👥 Team Members:</h3>
-            <table style="width: 100%; border-collapse: collapse; background: #d4efdf; border-radius: 8px;">
-              <tr style="background: #27ae60; color: white;">
-                <th style="padding: 10px;">#</th>
-                <th style="padding: 10px;">Name</th>
-                <th style="padding: 10px;">Email</th>
-                <th style="padding: 10px;">Institute</th>
-              </tr>
-              ${membersList}
-            </table>
-
-            <hr style="border: 1px solid #ddd;">
-
-            <p style="font-size: 13px; color: #999; margin-top: 16px;">
-              ⚠️ Note: If you are not selected for Round 2, 50% of your amount will be refunded.
+          <h3>📞 For Any Queries, Contact:</h3>
+          <div style="padding:16px; border:1px solid #e5e7eb; border-radius:8px;">
+            <p style="margin:6px 0;">
+              <strong>Shreyash Dhavale</strong><br/>
+              📱 +91 9876543210
             </p>
 
-            <br>
-            <p style="font-size: 14px; color: #777;">Best Regards,<br><strong>Ignition HackVerse Team</strong></p>
+            <p style="margin:6px 0;">
+              <strong>Event Coordinator</strong><br/>
+              📱 +91 9123456789
+            </p>
           </div>
+
+          <!-- Footer -->
+          <p style="margin-top:24px; font-size:14px;">
+            We look forward to your innovation and creativity at Ignition HackVerse 2026. 🚀
+          </p>
+
+          <p style="font-size:14px;">
+            Warm Regards,<br/>
+            <strong>Ignition HackVerse 2026 Team</strong>
+          </p>
+
         </div>
+      </div>
       `,
     });
 
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Email error:', error);
-    return NextResponse.json({ success: false, error: 'Failed to send email' }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: 'Failed to send email' },
+      { status: 500 }
+    );
   }
 }
