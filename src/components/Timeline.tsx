@@ -128,7 +128,7 @@ function TimelineItem({ event, index }: { event: typeof timelineEvents[0]; index
         }}>
           <div style={{
             width: '50px',
-            height: '50px',
+            height: '50px',}}></div>
           <div className="tl-node-circle" style={{
             width: '44px',
             height: '44px',
@@ -142,7 +142,7 @@ function TimelineItem({ event, index }: { event: typeof timelineEvents[0]; index
             boxShadow: '0 0 0 4px rgba(99,102,241,0.25), 0 0 24px rgba(99,102,241,0.4)',
             flexShrink: 0,
             transition: 'box-shadow 0.3s',
-          }}>
+          }}> 
             { <FontAwesomeIcon icon={event.icon} style={{ color: '#fff' }} />}
           </div>
         </div>
@@ -224,7 +224,7 @@ function Card({ event, isLeft }: { event: typeof timelineEvents[0]; isLeft: bool
 
       {/* Description */}
       <p style={{
-        color: '#94a3b8', fontSize: '15px', margin: 0, lineHeight: 1.6,
+        color: '#94a3b8', fontSize: '15px', margin: 0, lineHeight: 1.6,}}></p>
       <p className="tl-card-desc" style={{
         color: '#94a3b8', fontSize: '13px', margin: 0, lineHeight: 1.6,
         fontFamily: "'Trebuchet MS', sans-serif",
@@ -417,7 +417,7 @@ export default function Timeline() {
               padding: '6px 20px', borderRadius: '999px',
               background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.4)',
               color: '#22D3EE', fontSize: '18px', fontWeight: 800, letterSpacing: '3px',
-              color: '#a5b4fc', fontSize: '11px', fontWeight: 700, letterSpacing: '3px',
+              
               textTransform: 'uppercase', fontFamily: "'Trebuchet MS', sans-serif",
               whiteSpace: 'nowrap',
             }}>March 22 · Day 1</div>
