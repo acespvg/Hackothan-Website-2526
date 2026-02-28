@@ -105,24 +105,38 @@ function Typewriter({ words }: { words: string[] }) {
     return () => clearTimeout(timeout);
   }, [charIndex, deleting, wordIndex, words]);
 
+  /*
+    CHROME FIX: The gradient span MUST be display:inline-block.
+    The cursor blink span keeps its own explicit color so it never
+    inherits the transparent fill from the sibling gradient span.
+  */
   return (
-    <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-cyan-400">
-      {displayed}
-      <span className="animate-blink text-blue-400">|</span>
-    </span>
+    <>
+      <span
+        style={{
+          display: "inline-block",
+          backgroundImage: "linear-gradient(90deg, #60a5fa 0%, #818cf8 50%, #67e8f9 100%)",
+          backgroundClip: "text",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          color: "transparent",
+          transform: "translateZ(0)",
+        }}
+      >
+        {displayed}
+      </span>
+      <span
+        className="animate-blink"
+        style={{ color: "#60a5fa", WebkitTextFillColor: "#60a5fa" }}
+      >
+        |
+      </span>
+    </>
   );
 }
 
 /* ─── Spark that flies outward from the logo ─── */
-function LogoSpark({
-  angle,
-  delay,
-  radius,
-}: {
-  angle: number;
-  delay: number;
-  radius: number;
-}) {
+function LogoSpark({ angle, delay, radius }: { angle: number; delay: number; radius: number }) {
   const rad = (angle * Math.PI) / 180;
   const tx = Math.cos(rad) * radius;
   const ty = Math.sin(rad) * radius;
@@ -130,28 +144,14 @@ function LogoSpark({
     <motion.div
       className="absolute rounded-full logo-spark"
       style={{
-        width: 5,
-        height: 5,
-        top: "50%",
-        left: "50%",
-        marginTop: -2.5,
-        marginLeft: -2.5,
+        width: 5, height: 5,
+        top: "50%", left: "50%",
+        marginTop: -2.5, marginLeft: -2.5,
         background: `hsl(${(angle * 1.2 + 200) % 360}, 90%, 70%)`,
         boxShadow: `0 0 8px 2px hsl(${(angle * 1.2 + 200) % 360}, 90%, 65%)`,
       }}
-      animate={{
-        x: [0, tx * 0.4, tx],
-        y: [0, ty * 0.4, ty],
-        scale: [0, 1.4, 0],
-        opacity: [0, 1, 0],
-      }}
-      transition={{
-        duration: 1.8,
-        delay,
-        repeat: Infinity,
-        repeatDelay: 2.4,
-        ease: [0.22, 1, 0.36, 1],
-      }}
+      animate={{ x: [0, tx * 0.4, tx], y: [0, ty * 0.4, ty], scale: [0, 1.4, 0], opacity: [0, 1, 0] }}
+      transition={{ duration: 1.8, delay, repeat: Infinity, repeatDelay: 2.4, ease: [0.22, 1, 0.36, 1] }}
     />
   );
 }
@@ -161,41 +161,21 @@ function GlowCorona() {
   const hue = useMotionValue(220);
   const color = useTransform(hue, (h) => `hsla(${h}, 90%, 60%, 0.55)`);
   const outerColor = useTransform(hue, (h) => `hsla(${h}, 80%, 55%, 0.20)`);
-
-  useAnimationFrame((t) => {
-    hue.set(220 + Math.sin(t / 2000) * 40);
-  });
-
+  useAnimationFrame((t) => { hue.set(220 + Math.sin(t / 2000) * 40); });
   return (
     <>
-      <motion.div
-        className="absolute inset-[-8px] rounded-full pointer-events-none"
+      <motion.div className="absolute inset-[-8px] rounded-full pointer-events-none"
         style={{ boxShadow: color }}
         animate={{ scale: [1, 1.04, 1] }}
-        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div
-        className="absolute inset-[-24px] rounded-full pointer-events-none blur-xl"
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }} />
+      <motion.div className="absolute inset-[-24px] rounded-full pointer-events-none blur-xl"
         style={{ background: outerColor }}
         animate={{ scale: [1, 1.08, 1], opacity: [0.5, 0.85, 0.5] }}
-        transition={{
-          duration: 3.5,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 0.3,
-        }}
-      />
-      <motion.div
-        className="absolute inset-[-56px] rounded-full pointer-events-none blur-3xl"
+        transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.3 }} />
+      <motion.div className="absolute inset-[-56px] rounded-full pointer-events-none blur-3xl"
         style={{ background: outerColor }}
         animate={{ scale: [1, 1.12, 1], opacity: [0.25, 0.5, 0.25] }}
-        transition={{
-          duration: 4,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 0.6,
-        }}
-      />
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.6 }} />
     </>
   );
 }
@@ -240,125 +220,135 @@ export default function HeroSection() {
       <style>{`
         @keyframes float {
           0%, 100% { transform: translateY(0px) scale(1); opacity: 0.3; }
-          50% { transform: translateY(-28px) scale(1.15); opacity: 0.7; }
+          50%       { transform: translateY(-28px) scale(1.15); opacity: 0.7; }
         }
         @keyframes blink {
           0%, 100% { opacity: 1; }
-          50% { opacity: 0; }
+          50%       { opacity: 0; }
         }
         @keyframes orb-pulse {
           0%, 100% { transform: scale(1); opacity: 0.18; }
-          50% { transform: scale(1.12); opacity: 0.28; }
+          50%       { transform: scale(1.12); opacity: 0.28; }
         }
         @keyframes grid-move {
-          0% { transform: translateY(0); }
+          0%   { transform: translateY(0); }
           100% { transform: translateY(60px); }
         }
         @keyframes slide-up {
           from { opacity: 0; transform: translateY(36px); }
           to   { opacity: 1; transform: translateY(0); }
         }
-        @keyframes slide-right {
-          from { opacity: 0; transform: translateX(48px); }
-          to   { opacity: 1; transform: translateX(0); }
-        }
         @keyframes badge-pop {
           from { opacity: 0; transform: scale(0.75); }
           to   { opacity: 1; transform: scale(1); }
         }
-        @keyframes shimmer {
+        @keyframes shimmer-move {
           0%   { background-position: -200% center; }
           100% { background-position:  200% center; }
         }
-        @keyframes ring-spin {
-          from { transform: rotate(0deg); }
-          to   { transform: rotate(360deg); }
-        }
-        @keyframes ring-spin-rev {
-          from { transform: rotate(0deg); }
-          to   { transform: rotate(-360deg); }
-        }
-        @keyframes image-glow {
-          0%, 100% { filter: drop-shadow(0 0 40px rgba(59,130,246,0.35)); }
-          50%       { filter: drop-shadow(0 0 70px rgba(99,102,241,0.55)); }
-        }
-        @keyframes countdown-pulse {
-          0%, 100% { box-shadow: 0 0 0 0 rgba(99,102,241,0.4); }
-          50%       { box-shadow: 0 0 0 10px rgba(99,102,241,0); }
-        }
+        @keyframes ring-spin     { from { transform: rotate(0deg);    } to { transform: rotate(360deg);  } }
+        @keyframes ring-spin-rev { from { transform: rotate(0deg);    } to { transform: rotate(-360deg); } }
 
-        .animate-float      { animation: float linear infinite; }
-        .animate-blink      { animation: blink 1s step-end infinite; }
-        .animate-orb-pulse  { animation: orb-pulse 6s ease-in-out infinite; }
-        .animate-grid-move  { animation: grid-move 8s linear infinite; }
-        .animate-ring-spin  { animation: ring-spin 12s linear infinite; }
-        .animate-ring-rev   { animation: ring-spin-rev 18s linear infinite; }
-        .animate-image-glow { animation: image-glow 4s ease-in-out infinite; }
-        .animate-shimmer    { animation: shimmer 2.5s linear infinite; }
-        .animate-countdown-pulse { animation: countdown-pulse 2s ease-in-out infinite; }
+        .animate-float     { animation: float linear infinite; }
+        .animate-blink     { animation: blink 1s step-end infinite; }
+        .animate-orb-pulse { animation: orb-pulse 6s ease-in-out infinite; }
+        .animate-grid-move { animation: grid-move 8s linear infinite; }
+        .animate-ring-spin { animation: ring-spin 12s linear infinite; }
+        .animate-ring-rev  { animation: ring-spin-rev 18s linear infinite; }
+        .slide-up          { animation: slide-up 0.75s cubic-bezier(.22,1,.36,1) both; }
+        .badge-pop         { animation: badge-pop 0.5s cubic-bezier(.34,1.56,.64,1) both; }
 
-        .slide-up   { animation: slide-up 0.75s cubic-bezier(.22,1,.36,1) both; }
-        .slide-right { animation: slide-right 0.85s cubic-bezier(.22,1,.36,1) both; }
-        .badge-pop  { animation: badge-pop 0.5s cubic-bezier(.34,1.56,.64,1) both; }
-
-        .shimmer-text {
-          background: linear-gradient(90deg,
-            #93c5fd 0%, #6366f1 30%, #c4b5fd 50%, #6366f1 70%, #93c5fd 100%);
+        /*
+         * GRADIENT TEXT — applied via CSS class, NOT Tailwind utilities.
+         *
+         * Root cause of the Chrome/Brave difference:
+         *   Chrome requires display:inline-block AND all four props set
+         *   together in the same rule for background-clip:text to work.
+         *   Brave (Chromium fork) is more lenient.
+         *
+         * Rules:
+         *   1. display: inline-block  (MUST — block-level breaks layout)
+         *   2. background-image       (the gradient)
+         *   3. -webkit-background-clip: text  AND  background-clip: text
+         *   4. -webkit-text-fill-color: transparent  AND  color: transparent
+         *   5. transform: translateZ(0)  — forces GPU compositing layer,
+         *      prevents Chrome from flattening the gradient to solid colour
+         *      in certain paint-order edge cases.
+         */
+        .grad-hackverse {
+          display: inline-block;
+          background-image: linear-gradient(
+            90deg,
+            #93c5fd 0%,
+            #6366f1 30%,
+            #c4b5fd 50%,
+            #6366f1 70%,
+            #93c5fd 100%
+          );
           background-size: 200% auto;
           -webkit-background-clip: text;
+                  background-clip: text;
           -webkit-text-fill-color: transparent;
-          background-clip: text;
+                  color: transparent;
+          transform: translateZ(0);
+          will-change: background-position;
+          animation: shimmer-move 2.5s linear infinite;
         }
 
-        .btn-primary {
-          position: relative;
-          overflow: hidden;
+        .grad-2026 {
+          display: inline-block;
+          background-image: linear-gradient(90deg, #60a5fa 0%, #818cf8 100%);
+          -webkit-background-clip: text;
+                  background-clip: text;
+          -webkit-text-fill-color: transparent;
+                  color: transparent;
+          transform: translateZ(0);
         }
+
+        /* Shine sweep on the CTA button */
+        .btn-primary { position: relative; overflow: hidden; }
         .btn-primary::before {
           content: '';
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.18) 50%, transparent 100%);
+          position: absolute; inset: 0;
+          background: linear-gradient(
+            90deg,
+            transparent 0%,
+            rgba(255,255,255,0.18) 50%,
+            transparent 100%
+          );
           background-size: 200% 100%;
-          animation: shimmer 2.2s linear infinite;
+          animation: shimmer-move 2.2s linear infinite;
         }
 
-        /* ── Mobile: image first, then text ── */
+        /* Mobile layout: image on top, text below */
         @media (max-width: 1023px) {
-          .hero-grid {
-            display: flex !important;
-            flex-direction: column !important;
-          }
+          .hero-grid { display: flex !important; flex-direction: column !important; }
           .hero-logo-col { order: -1; }
-          .hero-text-col { order: 1; }
+          .hero-text-col { order:  1; }
         }
 
-        /* ── Mobile orbit radius fixes ── */
+        /* Mobile: strip every decoration around the image */
         @media (max-width: 1023px) {
-          /* CSS spinning rings — shrink so they stay inside the card */
-          .ring-outer { inset: -10px !important; }
-          .ring-mid   { inset: -20px !important; }
-          .ring-inner { inset: -8px  !important; }
-
-          /* Sparks — hide on mobile */
-          .logo-spark { display: none !important; }
-
-          .badge-desktop {
-            visibility: hidden !important;
-            opacity: 0 !important;
-            pointer-events: none !important;
-          }
+          .ring-outer,
+          .ring-mid,
+          .ring-inner,
+          .logo-spark,
+          .orbit-dot,
+          .glow-corona-wrapper { display: none !important; }
         }
       `}</style>
 
       <section className="relative min-h-screen bg-gradient-to-br from-[#060c1a] via-[#0a1228] to-[#07091a] overflow-hidden flex items-center">
+
         {/* ─── Animated grid background ─── */}
         <div className="absolute inset-0 opacity-[0.07]">
           <div
             className="absolute inset-0 animate-grid-move"
             style={{
-              backgroundImage: `linear-gradient(rgba(99,102,241,0.5) 1px, transparent 1px),
-                                linear-gradient(90deg, rgba(99,102,241,0.5) 1px, transparent 1px)`,
+              backgroundImage: `
+                linear-gradient(rgba(99,102,241,0.5) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99,102,241,0.5) 1px, transparent 1px)
+              `,
               backgroundSize: "60px 60px",
             }}
           />
@@ -370,18 +360,11 @@ export default function HeroSection() {
           className="absolute bottom-[-200px] left-[-180px] w-[540px] h-[540px] bg-indigo-600/20 rounded-full blur-[180px] animate-orb-pulse"
           style={{ animationDelay: "3s" }}
         />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-cyan-600/6 rounded-full blur-[220px]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-cyan-600/[0.06] rounded-full blur-[220px]" />
 
         {/* ─── Floating particles ─── */}
         {PARTICLES.map((p) => (
-          <Particle
-            key={p.id}
-            x={p.x}
-            y={p.y}
-            size={p.size}
-            delay={p.delay}
-            duration={p.duration}
-          />
+          <Particle key={p.id} x={p.x} y={p.y} size={p.size} delay={p.delay} duration={p.duration} />
         ))}
 
         {/* ─── Horizontal line accents ─── */}
@@ -391,46 +374,64 @@ export default function HeroSection() {
         {/* ─── Main content ─── */}
         <div className="relative z-10 container mx-auto px-6 lg:px-12 pt-28 sm:pt-32 lg:pt-24 pb-20">
           <div className="hero-grid grid lg:grid-cols-2 gap-16 items-center">
+
             {/* ══ LEFT CONTENT ══ */}
             <div className="hero-text-col space-y-8">
+
               {/* Badge */}
               <div
                 className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 backdrop-blur-sm badge-pop ${mounted ? "" : "opacity-0"}`}
                 style={{ animationDelay: "0.1s" }}
               >
                 <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-                <span className="text-sm font-medium text-indigo-300 tracking-widest uppercase">
+                <span
+                  className="text-sm font-medium tracking-widest uppercase"
+                  style={{ color: "#a5b4fc", WebkitTextFillColor: "#a5b4fc" }}
+                >
                   Registration Open
                 </span>
               </div>
 
               {/* Title */}
-              <div
-                className={`slide-up ${mounted ? "" : "opacity-0"}`}
-                style={{ animationDelay: "0.2s" }}
-              >
+              <div className={`slide-up ${mounted ? "" : "opacity-0"}`} style={{ animationDelay: "0.2s" }}>
                 <h1
-                  className="text-5xl sm:text-6xl lg:text-7xl font-black leading-none tracking-tighter text-white"
+                  className="text-5xl sm:text-6xl lg:text-7xl font-black leading-none tracking-tighter"
                   style={{ fontFamily: "'Trebuchet MS', sans-serif" }}
                 >
-                  Ignition
-                  <br />
-                  <span className="shimmer-text animate-shimmer">
-                    HackVerse
+                  {/*
+                    Each line is a plain <span display:block> so line-breaks
+                    work correctly without <br> tags inside an h1.
+                    "Ignition" gets explicit white so it can never inherit
+                    any gradient transparency from a parent.
+                  */}
+                  <span
+                    style={{
+                      display: "block",
+                      color: "#ffffff",
+                      WebkitTextFillColor: "#ffffff",
+                    }}
+                  >
+                    Ignition
                   </span>
-                  <br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">
-                    2026
+                  <span className="grad-hackverse">HackVerse</span>
+                  <span
+                    style={{
+                      display: "block",
+                    }}
+                  >
+                    <span className="grad-2026">2026</span>
                   </span>
                 </h1>
               </div>
 
               {/* Typewriter subheading */}
               <div
-                className={`text-xl sm:text-2xl font-semibold text-gray-200 slide-up ${mounted ? "" : "opacity-0"}`}
+                className={`text-xl sm:text-2xl font-semibold slide-up ${mounted ? "" : "opacity-0"}`}
                 style={{ animationDelay: "0.35s" }}
               >
-                Where developers{" "}
+                <span style={{ color: "#e5e7eb", WebkitTextFillColor: "#e5e7eb" }}>
+                  Where developers{" "}
+                </span>
                 <Typewriter
                   words={[
                     "build the future.",
@@ -443,8 +444,12 @@ export default function HeroSection() {
 
               {/* Description */}
               <p
-                className={`text-lg sm:text-2xl text-white-400  max-w-md leading-relaxed slide-up ${mounted ? "" : "opacity-0"}`}
-                style={{ animationDelay: "0.5s" }}
+                className={`text-lg sm:text-2xl max-w-md leading-relaxed slide-up ${mounted ? "" : "opacity-0"}`}
+                style={{
+                  animationDelay: "0.5s",
+                  color: "#d1d5db",
+                  WebkitTextFillColor: "#d1d5db",
+                }}
               >
                 A 24-hour coding marathon where ideas ignite, innovation
                 thrives, and developers collaborate to build solutions that
@@ -457,48 +462,49 @@ export default function HeroSection() {
                 style={{ animationDelay: "0.6s" }}
               >
                 {[
-                  { value: 500, suffix: "+", label: "Hackers" },
-                  { value: 1.8, suffix: "lac", label: "Prize Pool" },
-                  { value: 24, suffix: "h", label: "Hackathon" },
+                  { value: 500, suffix: "+",   label: "Hackers"    },
+                  { value: 1.8, suffix: "lac",  label: "Prize Pool" },
+                  { value: 24,  suffix: "h",    label: "Hackathon"  },
                 ].map(({ value, suffix, label }) => (
                   <div key={label} className="text-center">
-                    <div className="text-2xl font-extrabold text-white">
+                    <div
+                      className="text-2xl font-extrabold"
+                      style={{ color: "#ffffff", WebkitTextFillColor: "#ffffff" }}
+                    >
                       <Counter end={value} suffix={suffix} />
                     </div>
-                    <div className="text-xs text-cyan-500  uppercase tracking-widest mt-0.5">
+                    <div
+                      className="text-xs uppercase tracking-widest mt-0.5"
+                      style={{ color: "#22d3ee", WebkitTextFillColor: "#22d3ee" }}
+                    >
                       {label}
                     </div>
                   </div>
                 ))}
               </div>
 
-              {/* CTA Buttons */}
+              {/* CTA Button */}
               <div
                 className={`flex flex-col sm:flex-row gap-4 pt-2 slide-up ${mounted ? "" : "opacity-0"}`}
                 style={{ animationDelay: "0.75s" }}
               >
                 <Link
                   href="/register"
-                  className="btn-primary group relative px-8 py-3.5 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-bold text-base shadow-[0_0_30px_rgba(99,102,241,0.35)] hover:shadow-[0_0_50px_rgba(99,102,241,0.55)] hover:scale-[1.04] active:scale-[0.98] transition-all duration-300 inline-flex"
+                  className="btn-primary group relative px-8 py-3.5 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-500 font-bold text-base shadow-[0_0_30px_rgba(99,102,241,0.35)] hover:shadow-[0_0_50px_rgba(99,102,241,0.55)] hover:scale-[1.04] active:scale-[0.98] transition-all duration-300 inline-flex"
+                  style={{ color: "#ffffff", WebkitTextFillColor: "#ffffff" }}
                 >
                   <span className="relative z-10 flex items-center gap-2">
                     Register Now
                     <svg
                       className="w-4 h-4 group-hover:translate-x-1 transition-transform"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
+                      fill="none" viewBox="0 0 24 24" stroke="currentColor"
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M17 8l4 4m0 0l-4 4m4-4H3"
-                      />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                     </svg>
                   </span>
                 </Link>
               </div>
+
             </div>
 
             {/* ══ RIGHT — LOGO ══ */}
@@ -506,113 +512,75 @@ export default function HeroSection() {
               className="hero-logo-col relative flex flex-col items-center lg:items-end"
               initial={{ opacity: 0, x: 48 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{
-                duration: 0.85,
-                delay: 0.3,
-                ease: [0.22, 1, 0.36, 1],
-              }}
+              transition={{ duration: 0.85, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
             >
-              <div
-                className="relative w-full max-w-[500px] lg:max-w-[500px] sm:max-w-[360px]"
-                style={{ maxWidth: "min(500px, 80vw)" }}
-              >
-                {/* ── CSS spinning rings ── */}
+              <div className="relative w-full" style={{ maxWidth: "min(500px, 80vw)" }}>
+
+                {/* CSS spinning rings — desktop only */}
                 <div className="ring-outer absolute inset-[-32px] rounded-full border border-indigo-500/15 animate-ring-spin" />
-                <div className="ring-mid absolute inset-[-64px] rounded-full border border-blue-500/10 animate-ring-rev" />
+                <div className="ring-mid   absolute inset-[-64px] rounded-full border border-blue-500/10 animate-ring-rev" />
                 <div
                   className="ring-inner absolute inset-[-20px] rounded-full animate-ring-spin"
-                  style={{
-                    border: "1px dashed rgba(99,102,241,0.18)",
-                    animationDuration: "24s",
-                  }}
+                  style={{ border: "1px dashed rgba(99,102,241,0.18)", animationDuration: "24s" }}
                 />
 
-                {/* ── Orbit dots ── */}
+                {/* Orbit dots — desktop only */}
                 {[
-                  { deg: 0, color: "#60a5fa", size: 10 },
-                  { deg: 90, color: "#818cf8", size: 7 },
+                  { deg: 0,   color: "#60a5fa", size: 10 },
+                  { deg: 90,  color: "#818cf8", size: 7  },
                   { deg: 180, color: "#34d399", size: 10 },
-                  { deg: 270, color: "#a78bfa", size: 7 },
+                  { deg: 270, color: "#a78bfa", size: 7  },
                 ].map(({ deg, color, size }, i) => (
                   <motion.div
                     key={i}
                     className="absolute rounded-full orbit-dot"
                     style={{
-                      width: size,
-                      height: size,
-                      top: "50%",
-                      left: "50%",
-                      marginTop: -(size / 2),
-                      marginLeft: -(size / 2),
+                      width: size, height: size,
+                      top: "50%", left: "50%",
+                      marginTop: -(size / 2), marginLeft: -(size / 2),
                       background: color,
                       boxShadow: `0 0 14px 4px ${color}`,
                       translateX: Math.cos((deg * Math.PI) / 180) * 260,
                       translateY: Math.sin((deg * Math.PI) / 180) * 260,
                     }}
-                    animate={{
-                      rotate: 360,
-                      scale: [1, 1.5, 1],
-                      opacity: [0.7, 1, 0.7],
-                    }}
+                    animate={{ rotate: 360, scale: [1, 1.5, 1], opacity: [0.7, 1, 0.7] }}
                     transition={{
-                      rotate: {
-                        duration: 12,
-                        repeat: Infinity,
-                        ease: "linear",
-                      },
-                      scale: {
-                        duration: 2.5,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                        delay: i * 0.6,
-                      },
-                      opacity: {
-                        duration: 2.5,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                        delay: i * 0.6,
-                      },
+                      rotate:  { duration: 12,  repeat: Infinity, ease: "linear" },
+                      scale:   { duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: i * 0.6 },
+                      opacity: { duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: i * 0.6 },
                     }}
                   />
                 ))}
 
-                {/* ── Sparks (hidden on mobile via .logo-spark CSS) ── */}
+                {/* Sparks — desktop only */}
                 {SPARK_ANGLES.map((s, i) => (
-                  <LogoSpark
-                    key={i}
-                    angle={s.angle}
-                    delay={s.delay}
-                    radius={s.radius}
-                  />
+                  <LogoSpark key={i} angle={s.angle} delay={s.delay} radius={s.radius} />
                 ))}
 
-                {/* ── Glow corona ── */}
-                <div className="absolute inset-0 flex items-center justify-center">
+                {/* Glow corona — desktop only */}
+                <div className="glow-corona-wrapper absolute inset-0 flex items-center justify-center">
                   <div className="relative w-full h-full">
                     <GlowCorona />
                   </div>
                 </div>
 
-                {/* ── Logo ── */}
+                {/* Logo image — float animation on ALL screen sizes */}
                 <div className="relative z-10">
                   <LogoFloat>
-                    <div className="relative">
-                      <Image
-                        src="/IgnitionHeroSection-removebg-preview.png"
-                        alt="Ignition HackVerse 2026 Logo"
-                        width={600}
-                        height={700}
-                        priority
-                        className="w-full h-auto"
-                      />
-                    </div>
+                    <Image
+                      src="/IgnitionHeroSection-removebg-preview.png"
+                      alt="Ignition HackVerse 2026 Logo"
+                      width={600}
+                      height={700}
+                      priority
+                      className="w-full h-auto"
+                    />
                   </LogoFloat>
                 </div>
 
-                {/* ══ DESKTOP-ONLY absolute badges ══ */}
-
               </div>
             </motion.div>
+
           </div>
         </div>
 

@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Ignition Hackverse 2k26",
+  title: "Ignition Hackverse",
   description: "Official website for Ignition Hackverse 2k26, Organized by PVGCOET&M",
 };
 
