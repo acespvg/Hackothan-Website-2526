@@ -5,6 +5,10 @@ import { useEffect, useRef, useState } from "react";
 const TOTAL = 180000;
 
 const TRACK_COLORS = [
+  { color: '#6366f1', soft: 'rgba(99,102,241,',  label:   'Track I'   },
+  { color: '#38bdf8', soft: 'rgba(56,189,248,',   label: 'Track II'  },
+  { color: '#a78bfa', soft: 'rgba(167,139,250,',  label: 'Track III' },
+  { color: '#34d399', soft: 'rgba(52,211,153,',   label: 'Track IV'  },
   { color: "#6366f1", soft: "rgba(99,102,241,", label: "Track I" },
   { color: "#38bdf8", soft: "rgba(56,189,248,", label: "Track II" },
   { color: "#a78bfa", soft: "rgba(167,139,250,", label: "Track III" },
