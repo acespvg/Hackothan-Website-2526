@@ -16,25 +16,22 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 const timelineEvents = [
-  { date: "March 22, 2025", time: "8:30 AM", title: "Team Reporting", description: "Team check-in and setting up workstations", icon: faUsers, tag: "Day 1" },
-  { date: "March 22, 2025", time: "10:00 AM", title: "Hackathon Begins", description: "Inauguration & 24-hour Hackathon starts",icon: faRocket,  tag: "Day 1" },
-  { date: "March 22, 2025", time: "12:00 PM", title: "Lunch Break", description: "Lunch will be provided",icon: faUtensils,  tag: "Day 1" },
-  { date: "March 22, 2025", time: "2:30 PM", title: "Mentor Talk", description: "Get guidance from industry experts",icon: faChalkboardUser,  tag: "Day 1" },
-  { date: "March 22, 2025", time: "4:00 PM", title: "Tea Break", description: "A short break for relaxation",icon: faMugHot,  tag: "Day 1" },
-  { date: "March 22, 2025", time: "7:00 PM", title: "Dinner & Recreational Activities", description: "Have a networking dinner",icon: faUtensils, tag: "Day 1" },
-  { date: "March 23, 2025", time: "1:00 AM", title: "Tea Break", description: "Another short break for relaxation",icon: faMugHot,  tag: "Day 2" },
-  { date: "March 23, 2025", time: "8:00 AM – 10:00 AM", title: "Final Touches & Breakfast", description: "Last minute adjustments before judging round",icon: faScrewdriverWrench, tag: "Day 2" },
-  { date: "March 23, 2025", time: "10:00 AM – 11:30 AM", title: "First Evaluation Round", description: "First Assessment Round of Teams",icon: faClipboardCheck, tag: "Day 2" },
-  { date: "March 23, 2025", time: "11:45 AM", title: "Result Declaration – Round 1", description: "Announcement of round 1 selected teams",icon: faBullhorn,  tag: "Day 2" },
-  { date: "March 23, 2025", time: "11:45 – 12:00 PM", title: "Certificate & Goodies Distribution", description: "For eliminated teams, certificates and goodies will be distributed.",icon: faCertificate,  tag: "Day 2" },
-  { date: "March 23, 2025", time: "12:00 – 12:30 PM", title: "Lunch", description: "Lunch for teams selected for final round",icon: faUtensils, tag: "Day 2" },
-  { date: "March 23, 2025", time: "12:30 – 2:00 PM", title: "Final Evaluation Round", description: "Participant presentations and judgment assessments.", icon: faClipboardCheck, tag: "Day 2" },
-  { date: "March 23, 2025", time: "2:15 – 3:30 PM", title: "Prize Distribution", description: "Recognition and awarding of winners.", icon: faTrophy,  tag: "Day 2" },
+  { date: "April 3, 2026", time: "8:30 AM", title: "Team Reporting", description: "Team check-in and setting up workstations", icon: faUsers, tag: "Day 1" },
+  { date: "April 3, 2026", time: "10:00 AM", title: "Hackathon Begins", description: "Inauguration & 24-hour Hackathon starts",icon: faRocket,  tag: "Day 1" },
+  { date: "April 3, 2026", time: "12:00 PM", title: "Lunch Break", description: "Lunch will be provided",icon: faUtensils,  tag: "Day 1" },
+  { date: "April 3, 2026", time: "2:30 PM", title: "Mentor Talk", description: "Get guidance from industry experts",icon: faChalkboardUser,  tag: "Day 1" },
+  { date: "April 3, 2026", time: "4:00 PM", title: "Tea Break", description: "A short break for relaxation",icon: faMugHot,  tag: "Day 1" },
+  { date: "April 3, 2026", time: "7:00 PM", title: "Dinner & Recreational Activities", description: "Have a networking dinner",icon: faUtensils, tag: "Day 1" },
+  { date: "April 4, 2026", time: "1:00 AM", title: "Tea Break", description: "Another short break for relaxation",icon: faMugHot,  tag: "Day 2" },
+  { date: "April 4, 2026", time: "8:00 AM – 10:00 AM", title: "Final Touches & Breakfast", description: "Last minute adjustments before judging round",icon: faScrewdriverWrench, tag: "Day 2" },
+  { date: "April 4, 2026", time: "10:00 AM – 11:30 AM", title: "First Evaluation Round", description: "First Assessment Round of Teams",icon: faClipboardCheck, tag: "Day 2" },
+  { date: "April 4, 2026", time: "11:45 AM", title: "Result Declaration – Round 1", description: "Announcement of round 1 selected teams",icon: faBullhorn,  tag: "Day 2" },
+  { date: "April 4, 2026", time: "11:45 – 12:00 PM", title: "Certificate & Goodies Distribution", description: "For eliminated teams, certificates and goodies will be distributed.",icon: faCertificate,  tag: "Day 2" },
+  { date: "April 4, 2026", time: "12:00 – 12:30 PM", title: "Lunch", description: "Lunch for teams selected for final round",icon: faUtensils, tag: "Day 2" },
+  { date: "April 4, 2026", time: "12:30 – 2:00 PM", title: "Final Evaluation Round", description: "Participant presentations and judgment assessments.", icon: faClipboardCheck, tag: "Day 2" },
+  { date: "April 4, 2026", time: "2:15 – 3:30 PM", title: "Prize Distribution", description: "Recognition and awarding of winners.", icon: faTrophy,  tag: "Day 2" },
 ];
 
-// ── FIX 1: No explicit return type annotation — TypeScript infers it safely.
-// ── FIX 2: Return `as const` so destructuring gives a typed [Ref, boolean] tuple
-//           instead of the wider (Ref | boolean)[] union type.
 function useInView(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);
