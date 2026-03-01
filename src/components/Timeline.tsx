@@ -84,7 +84,7 @@ function TimelineItem({ event, index }: { event: typeof timelineEvents[0]; index
             textTransform: 'uppercase' as const,
             fontFamily: "'Trebuchet MS', sans-serif",
             whiteSpace: 'nowrap' as const,
-          }}>March 23 · Day 2</div>
+          }}>April 4 · Day 2</div>
           <div style={{ flex: 1, height: '1px', background: 'linear-gradient(to left, transparent, rgba(56,189,248,0.4))' }} />
         </div>
       )}
