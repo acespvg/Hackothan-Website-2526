@@ -2,23 +2,23 @@
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 const goldSponsors = [
-  { name: 'Sponsor 1', image: '/sponser1.jpg' },
-  { name: 'Sponsor 2', image: '/sponser2.png' },
+  { name: 'Sponsor 1', image: '/Redbull.png' },
+  { name: 'Sponsor 2', image: '/Algorand.svg' },
 ];
 
 const silverSponsors = [
-  { name: 'Sponsor 3', image: '/sponser3.png' },
-  { name: 'Sponsor 4', image: '/sponser4.jpg' },
-  { name: 'Sponsor 5', image: '/sponser5.png' },
+  { name: 'Sponsor 3', image: '/sinarmas.png' },
+ /* { name: 'Sponsor 4', image: '/sponser4.jpg' },
+  { name: 'Sponsor 5', image: '/sponser5.png' },*/
 ];
 
-const communityPartners = [
+/*const communityPartners = [
   { name: 'Sponsor 6', image: '/sponser6.jpg' },
   { name: 'Sponsor 7', image: '/sponser7.jpg' },
-];
+];*/
 
-const goldHover    = { glow: 'rgba(234,179,8,0.55)',   bg: 'rgba(234,179,8,0.07)',   border: 'rgba(234,179,8,0.85)'   };
-const silverHover  = { glow: 'rgba(148,163,184,0.45)', bg: 'rgba(148,163,184,0.06)', border: 'rgba(148,163,184,0.75)' };
+const goldHover    = { glow: 'rgba(234,179,8,0.55)',   bg: 'cyan',   border: 'rgba(234,179,8,0.85)'   };
+const silverHover  = { glow: 'rgba(148,163,184,0.45)', bg: 'cyan', border: 'rgba(148,163,184,0.75)' };
 const partnerHover = { glow: 'rgba(34,211,238,0.4)',   bg: 'rgba(34,211,238,0.06)',  border: 'rgba(34,211,238,0.75)'  };
 
 const css = `
@@ -283,15 +283,60 @@ export default function Sponser() {
           </div>
 
           {/* Community */}
+          {/* 
           <div>
             <SectionLabel label="Community Partners" color="#22d3ee" />
-            <div className="sg-community">
+          <div className="sg-community">
               {communityPartners.map((s, i) => (
                 <SponsorCard key={i} sponsor={s} hoverStyle={partnerHover} visible={visible} delay={370 + i * 70} />
               ))}
             </div>
           </div>
+          */}
+              {/* Contribute Section */}
+<div style={{ 
+  marginTop: 'clamp(32px, 4vw, 60px)',
+  textAlign: 'center'
+}}>
+  <h2 style={{
+    fontSize: 'clamp(18px, 2.5vw, 28px)',
+    fontWeight: 700,
+    fontFamily: "'Trebuchet MS', sans-serif",
+    color: '#fff',
+    marginBottom: '14px'
+  }}>
+    Want to Contribute to the{' '}
+    <span style={{
+      background: 'linear-gradient(90deg, #818cf8, #a78bfa)',
+      WebkitBackgroundClip: 'text',
+      WebkitTextFillColor: 'transparent',
+      backgroundClip: 'text'
+    }}>
+      Hackathon?
+    </span>
+  </h2>
 
+  <p style={{
+    fontSize: 'clamp(11px, 1.5vw, 14px)',
+    color: 'rgba(255,255,255,0.45)',
+    marginBottom: '20px'
+  }}>
+    Partner with us to empower innovation and connect with emerging talent.
+  </p>
+
+  <button style={{
+    padding: '10px 24px',
+    borderRadius: '999px',
+    border: '1px solid rgba(99,102,241,0.5)',
+    background: 'rgba(99,102,241,0.12)',
+    color: '#fff',
+    fontWeight: 600,
+    cursor: 'pointer',
+    transition: 'all 0.3s ease'
+  }}>
+    Become a Sponsor
+  </button>
+</div>
           <div style={{
             position: 'absolute', bottom: 0, left: '30%', right: '30%', height: '1px',
             background: 'linear-gradient(90deg,transparent,rgba(99,102,241,0.35),transparent)',
