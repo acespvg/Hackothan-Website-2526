@@ -403,7 +403,7 @@ export default function Timeline() {
               maxWidth: '420px', margin: '0 auto', lineHeight: 1.7,
               animation: 'title-reveal 0.8s cubic-bezier(.22,1,.36,1) 0.15s both',
             }}>
-              March 22–23, 2025 · From kickoff to prize stage — every moment mapped.
+              April 3-4, 2026 · From kickoff to prize stage — every moment mapped.
             </p>
           </div>
 
@@ -417,7 +417,7 @@ export default function Timeline() {
               
               textTransform: 'uppercase', fontFamily: "'Trebuchet MS', sans-serif",
               whiteSpace: 'nowrap',
-            }}>March 22 · Day 1</div>
+            }}>April 3 · Day 1</div>
             <div style={{ flex: 1, height: '1px', background: 'linear-gradient(to left, transparent, rgba(99,102,241,0.4))' }} />
           </div>
 

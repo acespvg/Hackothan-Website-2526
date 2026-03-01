@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'motion/react';
 const faqData = [
   {
     question: "Is the Hackathon online or offline?",
-    answer: "This is an offline Hackathon conducted at PVG COET, Pune."
+    answer: "First, an online elimination round will be conducted, followed by an offline Hackathon conducted at PVG's COET&M, Pune."
   },
   {
     question: "Who can participate?",
