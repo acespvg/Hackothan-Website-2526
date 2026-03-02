@@ -105,11 +105,6 @@ function Typewriter({ words }: { words: string[] }) {
     return () => clearTimeout(timeout);
   }, [charIndex, deleting, wordIndex, words]);
 
-  /*
-    CHROME FIX: The gradient span MUST be display:inline-block.
-    The cursor blink span keeps its own explicit color so it never
-    inherits the transparent fill from the sibling gradient span.
-  */
   return (
     <>
       <span
@@ -258,23 +253,6 @@ export default function HeroSection() {
         .slide-up          { animation: slide-up 0.75s cubic-bezier(.22,1,.36,1) both; }
         .badge-pop         { animation: badge-pop 0.5s cubic-bezier(.34,1.56,.64,1) both; }
 
-        /*
-         * GRADIENT TEXT — applied via CSS class, NOT Tailwind utilities.
-         *
-         * Root cause of the Chrome/Brave difference:
-         *   Chrome requires display:inline-block AND all four props set
-         *   together in the same rule for background-clip:text to work.
-         *   Brave (Chromium fork) is more lenient.
-         *
-         * Rules:
-         *   1. display: inline-block  (MUST — block-level breaks layout)
-         *   2. background-image       (the gradient)
-         *   3. -webkit-background-clip: text  AND  background-clip: text
-         *   4. -webkit-text-fill-color: transparent  AND  color: transparent
-         *   5. transform: translateZ(0)  — forces GPU compositing layer,
-         *      prevents Chrome from flattening the gradient to solid colour
-         *      in certain paint-order edge cases.
-         */
         .grad-hackverse {
           display: inline-block;
           background-image: linear-gradient(
@@ -305,7 +283,6 @@ export default function HeroSection() {
           transform: translateZ(0);
         }
 
-        /* Shine sweep on the CTA button */
         .btn-primary { position: relative; overflow: hidden; }
         .btn-primary::before {
           content: '';
@@ -336,6 +313,98 @@ export default function HeroSection() {
           .orbit-dot,
           .glow-corona-wrapper { display: none !important; }
         }
+
+        /* ─── LARGE SCREEN FIXES (>= 1920px / 2K / 4K / big TVs) ─── */
+
+        /* Scale up grid background cell size so it doesn't look like noise */
+        @media (min-width: 1920px) {
+          .hero-bg-grid { background-size: 80px 80px !important; }
+        }
+        @media (min-width: 2560px) {
+          .hero-bg-grid { background-size: 120px 120px !important; }
+        }
+        @media (min-width: 3840px) {
+          .hero-bg-grid { background-size: 180px 180px !important; }
+        }
+
+        /* Widen the content container on huge screens */
+        @media (min-width: 1920px) {
+          .hero-container { max-width: 1800px !important; }
+        }
+        @media (min-width: 2560px) {
+          .hero-container { max-width: 2400px !important; }
+        }
+        @media (min-width: 3840px) {
+          .hero-container { max-width: 3400px !important; }
+        }
+
+        /* Scale up the title text */
+        @media (min-width: 1920px) {
+          .hero-title { font-size: clamp(5rem, 7vw, 10rem) !important; }
+          .hero-subtitle { font-size: clamp(1.5rem, 2vw, 3rem) !important; }
+          .hero-desc { font-size: clamp(1.25rem, 1.5vw, 2.2rem) !important; max-width: 640px !important; }
+          .hero-stat-val { font-size: clamp(2rem, 2.5vw, 3.5rem) !important; }
+          .hero-stat-label { font-size: clamp(0.75rem, 0.9vw, 1.2rem) !important; }
+          .hero-badge { font-size: clamp(0.75rem, 0.9vw, 1.1rem) !important; padding: 0.75rem 1.5rem !important; }
+          .hero-cta { padding: 1.25rem 2.5rem !important; font-size: clamp(1rem, 1.2vw, 1.5rem) !important; }
+          .hero-logo-wrapper { max-width: min(700px, 45vw) !important; }
+        }
+
+        @media (min-width: 2560px) {
+          .hero-title { font-size: clamp(7rem, 8vw, 13rem) !important; }
+          .hero-subtitle { font-size: clamp(2rem, 2.5vw, 4rem) !important; }
+          .hero-desc { font-size: clamp(1.5rem, 1.8vw, 2.8rem) !important; max-width: 900px !important; }
+          .hero-stat-val { font-size: clamp(2.5rem, 3vw, 5rem) !important; }
+          .hero-stat-label { font-size: clamp(0.9rem, 1vw, 1.5rem) !important; letter-spacing: 0.2em !important; }
+          .hero-badge { font-size: clamp(0.9rem, 1vw, 1.4rem) !important; padding: 1rem 2rem !important; }
+          .hero-cta { padding: 1.5rem 3.5rem !important; font-size: clamp(1.2rem, 1.5vw, 2rem) !important; border-radius: 1.25rem !important; }
+          .hero-logo-wrapper { max-width: min(900px, 42vw) !important; }
+        }
+
+        @media (min-width: 3840px) {
+          .hero-title { font-size: clamp(10rem, 10vw, 18rem) !important; }
+          .hero-subtitle { font-size: clamp(3rem, 3.5vw, 6rem) !important; }
+          .hero-desc { font-size: clamp(2rem, 2.2vw, 4rem) !important; max-width: 1400px !important; }
+          .hero-stat-val { font-size: clamp(3.5rem, 4vw, 7rem) !important; }
+          .hero-stat-label { font-size: clamp(1.2rem, 1.3vw, 2.2rem) !important; letter-spacing: 0.25em !important; }
+          .hero-badge { font-size: clamp(1.2rem, 1.4vw, 2rem) !important; padding: 1.5rem 3rem !important; border-radius: 9999px !important; }
+          .hero-cta { padding: 2rem 5rem !important; font-size: clamp(1.6rem, 2vw, 3rem) !important; border-radius: 1.5rem !important; }
+          .hero-logo-wrapper { max-width: min(1300px, 40vw) !important; }
+          .hero-stats-gap { gap: 5rem !important; }
+        }
+
+        /* Bigger orbs on large displays so they remain visible */
+        @media (min-width: 1920px) {
+          .orb-top-right  { width: 900px !important; height: 900px !important; }
+          .orb-bottom-left { width: 800px !important; height: 800px !important; }
+        }
+        @media (min-width: 2560px) {
+          .orb-top-right  { width: 1200px !important; height: 1200px !important; }
+          .orb-bottom-left { width: 1100px !important; height: 1100px !important; }
+        }
+        @media (min-width: 3840px) {
+          .orb-top-right  { width: 2000px !important; height: 2000px !important; top: -400px !important; right: -400px !important; }
+          .orb-bottom-left { width: 1800px !important; height: 1800px !important; bottom: -500px !important; left: -400px !important; }
+        }
+
+        /* Larger particles on big screens */
+        @media (min-width: 2560px) {
+          .animate-float { min-width: 8px !important; min-height: 8px !important; }
+        }
+        @media (min-width: 3840px) {
+          .animate-float { min-width: 14px !important; min-height: 14px !important; }
+        }
+
+        /* Wider gap between hero columns on huge screens */
+        @media (min-width: 1920px) {
+          .hero-grid { gap: 8rem !important; }
+        }
+        @media (min-width: 2560px) {
+          .hero-grid { gap: 12rem !important; }
+        }
+        @media (min-width: 3840px) {
+          .hero-grid { gap: 18rem !important; }
+        }
       `}</style>
 
       <section className="relative min-h-screen bg-gradient-to-br from-[#060c1a] via-[#0a1228] to-[#07091a] overflow-hidden flex items-center">
@@ -343,7 +412,7 @@ export default function HeroSection() {
         {/* ─── Animated grid background ─── */}
         <div className="absolute inset-0 opacity-[0.07]">
           <div
-            className="absolute inset-0 animate-grid-move"
+            className="absolute inset-0 animate-grid-move hero-bg-grid"
             style={{
               backgroundImage: `
                 linear-gradient(rgba(99,102,241,0.5) 1px, transparent 1px),
@@ -355,9 +424,9 @@ export default function HeroSection() {
         </div>
 
         {/* ─── Big radial orbs ─── */}
-        <div className="absolute top-[-180px] right-[-180px] w-[640px] h-[640px] bg-blue-600/20 rounded-full blur-[200px] animate-orb-pulse" />
+        <div className="orb-top-right absolute top-[-180px] right-[-180px] w-[640px] h-[640px] bg-blue-600/20 rounded-full blur-[200px] animate-orb-pulse" />
         <div
-          className="absolute bottom-[-200px] left-[-180px] w-[540px] h-[540px] bg-indigo-600/20 rounded-full blur-[180px] animate-orb-pulse"
+          className="orb-bottom-left absolute bottom-[-200px] left-[-180px] w-[540px] h-[540px] bg-indigo-600/20 rounded-full blur-[180px] animate-orb-pulse"
           style={{ animationDelay: "3s" }}
         />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-cyan-600/[0.06] rounded-full blur-[220px]" />
@@ -372,7 +441,7 @@ export default function HeroSection() {
         <div className="absolute bottom-[30%] left-0 w-full h-px bg-gradient-to-r from-transparent via-blue-500/15 to-transparent" />
 
         {/* ─── Main content ─── */}
-        <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 lg:px-12 pt-28 sm:pt-32 lg:pt-24 pb-20">
+        <div className="hero-container relative z-10 w-full max-w-[1400px] mx-auto px-6 lg:px-12 pt-28 sm:pt-32 lg:pt-24 pb-20">
           <div className="hero-grid grid lg:grid-cols-2 gap-16 items-center">
 
             {/* ══ LEFT CONTENT ══ */}
@@ -380,12 +449,12 @@ export default function HeroSection() {
 
               {/* Badge */}
               <div
-                className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 backdrop-blur-sm badge-pop ${mounted ? "" : "opacity-0"}`}
+                className={`hero-badge inline-flex items-center gap-2 px-4 py-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 backdrop-blur-sm badge-pop ${mounted ? "" : "opacity-0"}`}
                 style={{ animationDelay: "0.1s" }}
               >
                 <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
                 <span
-                  className="text-sm font-medium tracking-widest uppercase"
+                  className="text-sm font-medium tracking-widest uppercase hero-badge"
                   style={{ color: "#a5b4fc", WebkitTextFillColor: "#a5b4fc" }}
                 >
                   Registration Open
@@ -395,15 +464,9 @@ export default function HeroSection() {
               {/* Title */}
               <div className={`slide-up ${mounted ? "" : "opacity-0"}`} style={{ animationDelay: "0.2s" }}>
                 <h1
-                  className="text-5xl sm:text-6xl lg:text-7xl font-black leading-none tracking-tighter"
+                  className="hero-title text-5xl sm:text-6xl lg:text-7xl font-black leading-none tracking-tighter"
                   style={{ fontFamily: "'Trebuchet MS', sans-serif" }}
                 >
-                  {/*
-                    Each line is a plain <span display:block> so line-breaks
-                    work correctly without <br> tags inside an h1.
-                    "Ignition" gets explicit white so it can never inherit
-                    any gradient transparency from a parent.
-                  */}
                   <span
                     style={{
                       display: "block",
@@ -414,11 +477,7 @@ export default function HeroSection() {
                     Ignition
                   </span>
                   <span className="grad-hackverse">HackVerse</span>
-                  <span
-                    style={{
-                      display: "block",
-                    }}
-                  >
+                  <span style={{ display: "block" }}>
                     <span className="grad-2026">2026</span>
                   </span>
                 </h1>
@@ -426,7 +485,7 @@ export default function HeroSection() {
 
               {/* Typewriter subheading */}
               <div
-                className={`text-xl sm:text-2xl font-semibold slide-up ${mounted ? "" : "opacity-0"}`}
+                className={`hero-subtitle text-xl sm:text-2xl font-semibold slide-up ${mounted ? "" : "opacity-0"}`}
                 style={{ animationDelay: "0.35s" }}
               >
                 <span style={{ color: "#e5e7eb", WebkitTextFillColor: "#e5e7eb" }}>
@@ -444,7 +503,7 @@ export default function HeroSection() {
 
               {/* Description */}
               <p
-                className={`text-lg sm:text-2xl max-w-md leading-relaxed slide-up ${mounted ? "" : "opacity-0"}`}
+                className={`hero-desc text-lg sm:text-2xl max-w-md leading-relaxed slide-up ${mounted ? "" : "opacity-0"}`}
                 style={{
                   animationDelay: "0.5s",
                   color: "#d1d5db",
@@ -458,7 +517,7 @@ export default function HeroSection() {
 
               {/* Stats row */}
               <div
-                className={`flex gap-8 slide-up ${mounted ? "" : "opacity-0"}`}
+                className={`hero-stats-gap flex gap-8 slide-up ${mounted ? "" : "opacity-0"}`}
                 style={{ animationDelay: "0.6s" }}
               >
                 {[
@@ -468,13 +527,13 @@ export default function HeroSection() {
                 ].map(({ value, suffix, label }) => (
                   <div key={label} className="text-center">
                     <div
-                      className="text-2xl font-extrabold"
+                      className="hero-stat-val text-2xl font-extrabold"
                       style={{ color: "#ffffff", WebkitTextFillColor: "#ffffff" }}
                     >
                       <Counter end={value} suffix={suffix} />
                     </div>
                     <div
-                      className="text-xs uppercase tracking-widest mt-0.5"
+                      className="hero-stat-label text-xs uppercase tracking-widest mt-0.5"
                       style={{ color: "#22d3ee", WebkitTextFillColor: "#22d3ee" }}
                     >
                       {label}
@@ -490,7 +549,7 @@ export default function HeroSection() {
               >
                 <Link
                   href="/register"
-                  className="btn-primary group relative px-8 py-3.5 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-500 font-bold text-base shadow-[0_0_30px_rgba(99,102,241,0.35)] hover:shadow-[0_0_50px_rgba(99,102,241,0.55)] hover:scale-[1.04] active:scale-[0.98] transition-all duration-300 inline-flex"
+                  className="hero-cta btn-primary group relative px-8 py-3.5 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-500 font-bold text-base shadow-[0_0_30px_rgba(99,102,241,0.35)] hover:shadow-[0_0_50px_rgba(99,102,241,0.55)] hover:scale-[1.04] active:scale-[0.98] transition-all duration-300 inline-flex"
                   style={{ color: "#ffffff", WebkitTextFillColor: "#ffffff" }}
                 >
                   <span className="relative z-10 flex items-center gap-2">
@@ -514,7 +573,7 @@ export default function HeroSection() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.85, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
             >
-              <div className="relative w-full" style={{ maxWidth: "min(500px, 80vw)" }}>
+              <div className="hero-logo-wrapper relative w-full" style={{ maxWidth: "min(500px, 80vw)" }}>
 
                 {/* CSS spinning rings — desktop only */}
                 <div className="ring-outer absolute inset-[-32px] rounded-full border border-indigo-500/15 animate-ring-spin" />
@@ -564,7 +623,7 @@ export default function HeroSection() {
                   </div>
                 </div>
 
-                {/* Logo image — float animation on ALL screen sizes */}
+                {/* Logo image */}
                 <div className="relative z-10">
                   <LogoFloat>
                     <Image
