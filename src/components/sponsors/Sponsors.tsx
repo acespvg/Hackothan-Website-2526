@@ -353,7 +353,6 @@ export default function Sponser() {
                 Hackathon?
               </span>
             </h2>
-
             <p style={{
               fontSize: 'clamp(11px, 1.5vw, 14px)',
               color: 'rgba(255,255,255,0.45)',
@@ -362,8 +361,7 @@ export default function Sponser() {
             }}>
               Partner with us to empower innovation and connect with emerging talent.
             </p>
-
-            <button className="sponsor-btn">
+            <button className="sponsor-btn" onClick={() => window.location.href = "mailto:ignitionhackverse@pvgcoet.ac.in?subject=Sponsorship%20Inquiry%20and%20Deliverables-%20Ignition%20HackVerse%202026"}>
               Become a Sponsor
             </button>
           </div>
