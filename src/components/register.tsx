@@ -1029,7 +1029,7 @@ const RegistrationForm: React.FC = () => {
               <h2>Payment Information</h2>
               <div className="payment-layout">
                 <div className="qr-block">
-                  <img src="/image.png" alt="Payment QR Code" className="payment-qr" />
+                  <img src="/payment_qr.png" alt="Payment QR Code" className="payment-qr" />
                   <div className="payment-info">Scan QR code to pay</div>
                   <div className="payment-fee">₹599 per team</div>
                 </div>
