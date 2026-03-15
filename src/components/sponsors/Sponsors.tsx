@@ -1,27 +1,52 @@
 'use client'
 import { useEffect, useRef, useState } from 'react';
 
-const goldSponsors = [
-  { name: 'Sponsor 2', image: '/algorand_full_logo_white.png' },
-  { name: 'Sponsor 3', image: '/sinarmas.png' },
-  { name: 'Sponsor 4', image: '/vulnuris.webp' },
-  { name: 'Sponsor 5', image: '/weboreel.webp'}
+const platinumSponsors = [
+  { name: 'Algorand', image: '/algorand_full_logo_white.png' },
+  { name: 'PMTrack', image:'/PMTrack_logo-01-1.png'}
 ];
 
+const goldSponsors = [
+  { name: 'Weboreel', image: '/weboreel.webp'}
+];
+
+const silverSponsors = [
+  { name: 'Sinarmas', image: '/sinarmas.png' }
+]
+
+const bronzeSponsors = [
+  { name: 'Vulnuris', image: '/vulnuris.webp' }
+]
+
+const platiumHover = { glow: 'rgba(255,255,255,0.35)',   bg: 'rgba(255,255,255,0.08)',   border: 'rgba(255,255,255,0.65)' }
 const goldHover    = { glow: 'rgba(234,179,8,0.35)',   bg: 'rgba(234,179,8,0.07)',   border: 'rgba(234,179,8,0.7)'   };
 const silverHover  = { glow: 'rgba(148,163,184,0.3)',  bg: 'rgba(148,163,184,0.06)', border: 'rgba(148,163,184,0.6)' };
+const bronzeHover  = { glow: 'rgba(205,127,50,0.35)',  bg: 'rgba(205,127,50,0.07)', border: 'rgba(205,127,50,0.7)' };
 const partnerHover = { glow: 'rgba(34,211,238,0.3)',   bg: 'rgba(34,211,238,0.06)',  border: 'rgba(34,211,238,0.6)'  };
 
 const css = `
-  .sg-gold {
+  .sg-platinum {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .sg-gold {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: 20px;
   }
   .sg-silver {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
+  }
+  .sg-bronze {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    width: 66.66%;
+    margin: 0 auto;
   }
   .sg-community {
     display: grid;
@@ -324,12 +349,39 @@ export default function Sponser() {
             </p>
           </div>
 
+          {/* Platinum */}
+          <div style={{ marginBottom: 'clamp(20px, 3vw, 40px)' }}>
+            <SectionLabel label="Platinum Sponsors" color="#E5E4E2" />
+            <div className="sg-platinum">
+              {platinumSponsors.map((s, i) => (
+                <SponsorCard key={i} sponsor={s} hoverStyle={platiumHover} visible={visible} delay={i * 80} />
+              ))}
+            </div>
+          </div>
           {/* Gold */}
           <div style={{ marginBottom: 'clamp(20px, 3vw, 40px)' }}>
-            <SectionLabel label="Our Sponsors" color="#eab308" />
+            <SectionLabel label="Gold Sponsors" color="#eab308" />
             <div className="sg-gold">
               {goldSponsors.map((s, i) => (
                 <SponsorCard key={i} sponsor={s} hoverStyle={goldHover} visible={visible} delay={i * 80} />
+              ))}
+            </div>
+          </div>
+           {/* Silver */}
+          <div style={{ marginBottom: 'clamp(20px, 3vw, 40px)' }}>
+            <SectionLabel label="Silver Sponsors" color="#94a3b8" />
+            <div className="sg-silver">
+              {silverSponsors.map((s, i) => (
+                <SponsorCard key={i} sponsor={s} hoverStyle={silverHover} visible={visible} delay={i * 80} />
+              ))}
+            </div>
+          </div>
+          {/* Bronze */}
+          <div style={{ marginBottom: 'clamp(20px, 3vw, 40px)' }}>
+            <SectionLabel label="Bronze Sponsors" color="#CD7F32" />
+            <div className="sg-bronze">
+              {bronzeSponsors.map((s, i) => (
+                <SponsorCard key={i} sponsor={s} hoverStyle={bronzeHover} visible={visible} delay={i * 80} />
               ))}
             </div>
           </div>
