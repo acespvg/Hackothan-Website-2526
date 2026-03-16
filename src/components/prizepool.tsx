@@ -35,12 +35,12 @@ const TRACKS = [
     border: "rgba(56,189,248,0.30)",
     glow: "rgba(56,189,248,0.20)",
     topics: [
-      "Smart City",
+      "Cyber Security",
       "IoT",
+      "Smart City",
       "Mobility",
       "Sustainability",
-      "Gov Tech",
-      "Cyber Security"
+      "Gov Tech"      
     ],
   },
   {
