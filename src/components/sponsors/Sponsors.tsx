@@ -1,21 +1,23 @@
 'use client'
+import { url } from 'inspector';
 import { useEffect, useRef, useState } from 'react';
 
 const platinumSponsors = [
-  { name: 'Algorand', image: '/algorand_full_logo_white.png' },
-  { name: 'PMTrack', image:'/PMTrack_logo-01-1.png'}
+  { name: 'Algorand', image: '/algorand_full_logo_white.png',url:'https://www.algorand.com/' },
+  { name: 'PMTrack', image:'/PMTrack_logo-01-1.png',url:'https://www.pmtrackerp.in/' }
 ];
 
 const goldSponsors = [
-  { name: 'Weboreel', image: '/weboreel.webp'}
+  { name: 'Weboreel', image: '/weboreel.webp',url:'https://www.weboreel.com/' },
 ];
 
 const silverSponsors = [
-  { name: 'Sinarmas', image: '/sinarmas.png' }
+  { name: 'Sinarmas', image: '/sinarmas.png',url:'https://www.sinarmas.com/' },
+  { name: 'RVTechLearn', image: '/RVTechLearn.png',url:'https://www.rvtechlearn.com/' },
 ]
 
 const bronzeSponsors = [
-  { name: 'Vulnuris', image: '/vulnuris.webp' }
+  { name: 'Vulnuris', image: '/vulnuris.webp', url:'https://www.vulnuris.in/' },
 ]
 
 const platiumHover = { glow: 'rgba(255,255,255,0.35)',   bg: 'rgba(255,255,255,0.08)',   border: 'rgba(255,255,255,0.65)' }
@@ -198,7 +200,7 @@ function SectionLabel({ label, color }: { label: string; color: string }) {
 function SponsorCard({
   sponsor, hoverStyle, visible, delay = 0,
 }: {
-  sponsor: { name: string; image: string };
+  sponsor: { name: string; image: string,url: string };
   hoverStyle: { glow: string; bg: string; border: string };
   visible: boolean;
   delay?: number;
@@ -206,7 +208,8 @@ function SponsorCard({
   const [hovered, setHovered] = useState(false);
 
   return (
-    <div
+    <a href={sponsor.url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+      <div
       className="sponsor-card"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -248,7 +251,21 @@ function SponsorCard({
         }}
       />
     </div>
+    </a>
   );
+}
+
+function getGridInlineStyle(itemCount: number, maxCols: number) {
+  // When there are fewer items than the target number of columns, keep the grid
+  // content centered instead of left-aligned.
+  if (itemCount < maxCols && itemCount > 0) {
+    const cols = Math.max(1, itemCount);
+    return {
+      gridTemplateColumns: `repeat(${cols}, minmax(220px, 420px))`,
+      justifyContent: 'center',
+    };
+  }
+  return {};
 }
 
 export default function Sponser() {
@@ -352,16 +369,22 @@ export default function Sponser() {
           {/* Platinum */}
           <div style={{ marginBottom: 'clamp(20px, 3vw, 40px)' }}>
             <SectionLabel label="Platinum Sponsors" color="#E5E4E2" />
-            <div className="sg-platinum">
-              {platinumSponsors.map((s, i) => (
-                <SponsorCard key={i} sponsor={s} hoverStyle={platiumHover} visible={visible} delay={i * 80} />
-              ))}
-            </div>
+            <div
+            className="sg-platinum"
+            style={getGridInlineStyle(platinumSponsors.length, 2)}
+          >
+            {platinumSponsors.map((s, i) => (
+              <SponsorCard key={i} sponsor={s} hoverStyle={platiumHover} visible={visible} delay={i * 80} />
+            ))}
+          </div>
           </div>
           {/* Gold */}
           <div style={{ marginBottom: 'clamp(20px, 3vw, 40px)' }}>
             <SectionLabel label="Gold Sponsors" color="#eab308" />
-            <div className="sg-gold">
+            <div
+              className="sg-gold"
+              style={getGridInlineStyle(goldSponsors.length, 3)}
+            >
               {goldSponsors.map((s, i) => (
                 <SponsorCard key={i} sponsor={s} hoverStyle={goldHover} visible={visible} delay={i * 80} />
               ))}
@@ -370,7 +393,10 @@ export default function Sponser() {
            {/* Silver */}
           <div style={{ marginBottom: 'clamp(20px, 3vw, 40px)' }}>
             <SectionLabel label="Silver Sponsors" color="#94a3b8" />
-            <div className="sg-silver">
+            <div
+              className="sg-silver"
+              style={getGridInlineStyle(silverSponsors.length, 3)}
+            >
               {silverSponsors.map((s, i) => (
                 <SponsorCard key={i} sponsor={s} hoverStyle={silverHover} visible={visible} delay={i * 80} />
               ))}
@@ -383,6 +409,15 @@ export default function Sponser() {
               {bronzeSponsors.map((s, i) => (
                 <SponsorCard key={i} sponsor={s} hoverStyle={bronzeHover} visible={visible} delay={i * 80} />
               ))}
+            </div>
+          </div>
+          {/* Bronze */}
+          <div style={{ marginBottom: 'clamp(20px, 3vw, 40px)' }}>
+            <SectionLabel label="Community Sponsors" color="#CD7F32" />
+            <div className="sg-community">
+             {/*{bronzeSponsors.map((s, i) => (
+                <SponsorCard key={i} sponsor={s} hoverStyle={bronzeHover} visible={visible} delay={i * 80} />
+              ))} */} 
             </div>
           </div>
 
