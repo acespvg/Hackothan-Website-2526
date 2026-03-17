@@ -544,28 +544,44 @@ export default function HeroSection() {
                 ))}
               </div>
 
-              {/* CTA Button */}
+              {/* CTA Button + deadline */}
               <div
-                className={`flex flex-col sm:flex-row gap-4 pt-2 slide-up ${mounted ? "" : "opacity-0"}`}
+                className={`flex flex-col gap-3 pt-2 slide-up ${mounted ? "" : "opacity-0"}`}
                 style={{ animationDelay: "0.75s" }}
               >
-                <Link
-                  href="/register"
-                  className="hero-cta btn-primary group relative px-8 py-3.5 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-500 font-bold text-base shadow-[0_0_30px_rgba(99,102,241,0.35)] hover:shadow-[0_0_50px_rgba(99,102,241,0.55)] hover:scale-[1.04] active:scale-[0.98] transition-all duration-300 inline-flex"
-                  style={{ color: "#ffffff", WebkitTextFillColor: "#ffffff" }}
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Link
+                    href="/register"
+                    className="hero-cta btn-primary group relative px-8 py-3.5 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-500 font-bold text-base shadow-[0_0_30px_rgba(99,102,241,0.35)] hover:shadow-[0_0_50px_rgba(99,102,241,0.55)] hover:scale-[1.04] active:scale-[0.98] transition-all duration-300 inline-flex"
+                    style={{ color: "#ffffff", WebkitTextFillColor: "#ffffff" }}
+                  >
+                    <span className="relative z-10 flex items-center gap-2">
+                      Register Now
+                      <svg
+                        className="w-4 h-4 group-hover:translate-x-1 transition-transform"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                      </svg>
+                    </span>
+                  </Link>
+                </div>
+
+                {/* Deadline line */}
+                <p
+                  className={`slide-up ${mounted ? "" : "opacity-0"}`}
+                  style={{
+                    animationDelay: "0.85s",
+                    fontSize: "1rem",
+                    color: "#d1d5db",
+                    WebkitTextFillColor: "#d1d5db",
+                  }}
                 >
-                  <span className="relative z-10 flex items-center gap-2">
-                    Register Now
-                    <svg
-                      className="w-4 h-4 group-hover:translate-x-1 transition-transform"
-                      fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
+                  Last date to register:{" "}
+                  <span style={{ color: "#c4b5fd", WebkitTextFillColor: "#c4b5fd", fontWeight: 700 }}>
+                    March 22, 2026
                   </span>
-                </Link>
-                <br />
-                <p className={`hero-desc text-lg sm:text-2xl max-w-md leading-relaxed slide-up ${mounted ? "" : "opacity-0"}`}>Last date to register: <span className="font-bold">March 22, 2026</span></p>
+                </p>
               </div>
 
             </div>
