@@ -959,8 +959,8 @@ const RegistrationForm: React.FC = () => {
                   <li><strong>Presentation and Structure</strong></li>
                 </ul>
                 <p><strong>Note:</strong> The first round is purely for screening purposes. Your main problem statement for the hackathon will be different and provided 16 hours before the event.</p>
-                <p><strong>If you are not selected for Round 2, 50% of your amount will be refunded.</strong></p>
-                <p>Ensure both Drive links are publicly accessible (view access for anyone with the link).</p>
+                <p><strong>If you are not selected for Round 2, no refund will be provided.</strong></p>
+                <p>Ensure both Drive or youtube links are publicly accessible (view access for anyone with the link).</p>
               </div>
 
               <div className="link-input-group">
