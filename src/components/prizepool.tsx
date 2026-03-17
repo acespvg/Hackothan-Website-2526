@@ -38,7 +38,6 @@ const TRACKS = [
       "Cyber Security",
       "IoT",
       "Smart City",
-      "Mobility",
       "Sustainability",
       "Gov Tech"      
     ],

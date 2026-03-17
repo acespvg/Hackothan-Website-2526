@@ -564,6 +564,8 @@ export default function HeroSection() {
                     </svg>
                   </span>
                 </Link>
+                <br />
+                <p className={`hero-desc text-lg sm:text-2xl max-w-md leading-relaxed slide-up ${mounted ? "" : "opacity-0"}`}>Last date to register: <span className="font-bold">March 22, 2026</span></p>
               </div>
 
             </div>
