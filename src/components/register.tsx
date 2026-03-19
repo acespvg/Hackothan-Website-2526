@@ -249,9 +249,8 @@ const globalStyles = `
   .selection-criteria strong { color: #c7d2fe; }
 
   .link-input-group {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-top: 0.5rem;
+    display: grid; grid-template-columns: 1fr; gap: 1.2rem; margin-top: 0.5rem;
   }
-  @media (max-width: 640px) { .link-input-group { grid-template-columns: 1fr; } }
 
   .link-input-card {
     background: rgba(6,12,26,0.7);
@@ -263,11 +262,6 @@ const globalStyles = `
   .link-input-card:hover {
     border-color: rgba(99,102,241,0.45);
     box-shadow: 0 0 24px rgba(99,102,241,0.1);
-  }
-  .link-input-card.video-card { border-color: rgba(56,189,248,0.2); }
-  .link-input-card.video-card:hover {
-    border-color: rgba(56,189,248,0.45);
-    box-shadow: 0 0 24px rgba(56,189,248,0.1);
   }
   .link-input-card.invalid-link { border-color: rgba(239,68,68,0.5) !important; }
   .link-error-msg {
@@ -282,14 +276,12 @@ const globalStyles = `
     font-size: 1.1rem; flex-shrink: 0;
   }
   .link-card-icon.ppt-icon { background: rgba(99,102,241,0.18); border: 1px solid rgba(99,102,241,0.3); }
-  .link-card-icon.video-icon { background: rgba(56,189,248,0.15); border: 1px solid rgba(56,189,248,0.3); }
   .link-card-label {
     font-family: 'Trebuchet MS', sans-serif;
     font-size: 0.75rem; font-weight: 700;
     letter-spacing: 0.08em; text-transform: uppercase;
   }
   .link-card-label.ppt-label { color: #a5b4fc; }
-  .link-card-label.video-label { color: #67e8f9; }
   .link-card-sublabel { font-size: 0.72rem; color: #64748b; margin-top: 1px; }
 
   .link-input-field {
@@ -300,20 +292,14 @@ const globalStyles = `
     color: #e2e8f0; font-family: 'Trebuchet MS', sans-serif; font-size: 0.85rem;
     outline: none; transition: border-color 0.2s, box-shadow 0.2s;
   }
-  .link-input-field.video-field { border-color: rgba(56,189,248,0.25); }
   .link-input-field:focus {
     border-color: rgba(99,102,241,0.7);
     box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
-  }
-  .link-input-field.video-field:focus {
-    border-color: rgba(56,189,248,0.7);
-    box-shadow: 0 0 0 3px rgba(56,189,248,0.12);
   }
   .link-input-field::placeholder { color: #475569; }
 
   .link-hint { display: flex; align-items: center; gap: 6px; margin-top: 0.5rem; font-size: 0.72rem; color: #475569; }
   .link-hint-dot { width: 5px; height: 5px; border-radius: 50%; background: #6366f1; flex-shrink: 0; }
-  .link-hint-dot.blue { background: #38bdf8; }
 
   .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
   @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
@@ -605,8 +591,6 @@ const ALLOWED_LINK_PATTERNS = [
   /^https:\/\/(drive|docs)\.google\.com\//i,
   /^https:\/\/onedrive\.live\.com\//i,
   /^https:\/\/1drv\.ms\//i,
-  /^https:\/\/youtu\.be\//i,
-  /^https:\/\/(www\.)?youtube\.com\//i,
   /^https:\/\/[a-z0-9-]+\.sharepoint\.com\//i,
 ];
 
@@ -633,9 +617,7 @@ const RegistrationForm: React.FC = () => {
   });
 
   const [pptLink, setPptLink] = useState<string>('');
-  const [videoLink, setVideoLink] = useState<string>('');
   const [pptLinkError, setPptLinkError] = useState<string>('');
-  const [videoLinkError, setVideoLinkError] = useState<string>('');
 
   const fail = (msg: string): false => {
     setSubmitMessage({ type: 'error', text: msg });
@@ -683,11 +665,6 @@ const RegistrationForm: React.FC = () => {
     if (!isValidDriveLink(pptLink)) {
       setPptLinkError('Only Google Drive, OneDrive, or SharePoint links are accepted.');
       return fail('PPT link must be a valid Google Drive, OneDrive, or SharePoint URL.');
-    }
-    if (!videoLink.trim()) return fail('Please provide your Video Presentation link.');
-    if (!isValidDriveLink(videoLink)) {
-      setVideoLinkError('Only Google Drive, YouTube (unlisted), or OneDrive links are accepted.');
-      return fail('Video link must be a valid Google Drive, YouTube, or OneDrive URL.');
     }
     return true;
   };
@@ -745,7 +722,6 @@ const RegistrationForm: React.FC = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setPptLinkError('');
-    setVideoLinkError('');
     if (!validateForm()) return;
 
     setIsSubmitting(true);
@@ -764,7 +740,7 @@ const RegistrationForm: React.FC = () => {
         leader: { ...leaderData, receipt: leaderReceiptUrl },
         teamMembers: teamMembersData.map((m, i) => ({ ...m, receipt: memberReceiptUrls[i] })),
         paymentScreenshot: paymentScreenshotUrl,
-        pptLink, videoLink,
+        pptLink,
         registrationStatus: 'pending',
       };
 
@@ -798,7 +774,6 @@ const RegistrationForm: React.FC = () => {
       setTeamMembersData([{ ...initialFormData }]);
       setPaymentFile(null);
       setPptLink('');
-      setVideoLink('');
       setFilePreview({ leader: null, members: Array(3).fill(null), paymentScreenshot: null });
       setShowSuccessPopup(true);
 
@@ -948,7 +923,7 @@ const RegistrationForm: React.FC = () => {
               <h2>Project Submission</h2>
               <div className="selection-criteria">
                 <h3>Selection Criteria</h3>
-                <p>In case of excessive registrations, an elimination round will be conducted. Please share your project presentation and video walkthrough. Selection will be based on:</p>
+                <p>In case of excessive registrations, an elimination round will be conducted. Please share your project presentation. Selection will be based on:</p>
                 <ul>
                   <li><strong>Clarity and Understanding</strong></li>
                   <li><strong>Feasibility of Solution</strong></li>
@@ -960,7 +935,7 @@ const RegistrationForm: React.FC = () => {
                 </ul>
                 <p><strong>Note:</strong> The first round is purely for screening purposes. Your main problem statement for the hackathon will be different and provided 16 hours before the event.</p>
                 <p><strong>If you are not selected for Round 2, no refund will be provided.</strong></p>
-                <p>Ensure both Drive or youtube links are publicly accessible (view access for anyone with the link).</p>
+                <p>Ensure your shared presentation link is publicly accessible (view access for anyone with the link).</p>
               </div>
 
               <div className="link-input-group">
@@ -974,18 +949,6 @@ const RegistrationForm: React.FC = () => {
                   </div>
                   <input type="url" value={pptLink} onChange={(e) => { setPptLink(e.target.value); if (pptLinkError && isValidDriveLink(e.target.value)) setPptLinkError(''); }} onBlur={() => { if (pptLink && !isValidDriveLink(pptLink)) setPptLinkError('Only Google Drive, OneDrive, or SharePoint links accepted.'); else setPptLinkError(''); }} className="link-input-field" placeholder="https://drive.google.com/..." />
                   {pptLinkError ? <div className="link-error-msg">⚠ {pptLinkError}</div> : <div className="link-hint"><div className="link-hint-dot" />Share your project presentation slides</div>}
-                </div>
-
-                <div className={`link-input-card video-card${videoLinkError ? ' invalid-link' : ''}`}>
-                  <div className="link-card-header">
-                    <div className="link-card-icon video-icon">🎬</div>
-                    <div>
-                      <div className="link-card-label video-label">Video Presentation Link</div>
-                      <div className="link-card-sublabel">Google Drive / YouTube (unlisted)</div>
-                    </div>
-                  </div>
-                  <input type="url" value={videoLink} onChange={(e) => { setVideoLink(e.target.value); if (videoLinkError && isValidDriveLink(e.target.value)) setVideoLinkError(''); }} onBlur={() => { if (videoLink && !isValidDriveLink(videoLink)) setVideoLinkError('Only Google Drive, YouTube, or OneDrive links accepted.'); else setVideoLinkError(''); }} className="link-input-field video-field" placeholder="https://drive.google.com/..." />
-                  {videoLinkError ? <div className="link-error-msg">⚠ {videoLinkError}</div> : <div className="link-hint"><div className="link-hint-dot blue" />Share your recorded video walkthrough</div>}
                 </div>
               </div>
             </div>

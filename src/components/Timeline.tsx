@@ -13,7 +13,6 @@ import {
   faBullhorn,
   faCertificate,
   faTrophy,
-  faFileVideo,
   faFilePowerpoint,
   faUserCheck,
   faEnvelopeOpenText,
@@ -26,13 +25,13 @@ import {
 const round1Events = [
   {
     title: "Registration & Submission",
-    description: "Participants register and submit their project idea along with a short video pitch and a PPT presentation through the registration portal.",
-    icon: faFileVideo,
+    description: "Participants register and submit their project idea along with a PPT presentation through the registration portal.",
+    icon: faFilePowerpoint,
     tag: "Round 1",
   },
   {
-    title: "PPT & Video Review",
-    description: "A panel of judges evaluates all submitted presentations and video pitches based on innovation, feasibility, and relevance to the chosen track.",
+    title: "PPT Review",
+    description: "A panel of judges evaluates all submitted presentations based on innovation, feasibility, and relevance to the chosen track.",
     icon: faFilePowerpoint,
     tag: "Round 1",
   },
@@ -485,7 +484,7 @@ export default function Timeline() {
                 opacity: r1InView ? 1 : 0,
                 transition: 'opacity 0.6s ease 0.1s',
               }}>
-                Submit your PPT & video pitch during registration. Top teams get selected for the on-site hackathon.
+                Submit your PPT during registration. Top teams get selected for the on-site hackathon.
               </p>
             </div>
 
