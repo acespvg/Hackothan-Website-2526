@@ -15,7 +15,7 @@ const NAV_LINKS: {
   { label: 'Prizes',            href: '#prizes',            comingSoon: false },
   { label: 'Timeline',          href: '#timeline',          comingSoon: false },
   { label: 'Problem Statement', href: '#problem-statement', comingSoon: true  },
-  { label: 'Rulebook',          href: '/IGNITION.pdf',      comingSoon: false, download: 'Ignition_HackVerse_Rulebook.pdf' },
+  { label: 'Rulebook',          href: '/IGNITION-HACKVERSE_RULEBOOK.pdf',      comingSoon: false, download: 'Ignition_HackVerse_Rulebook.pdf' },
 ];
 
 export default function NavBar() {
