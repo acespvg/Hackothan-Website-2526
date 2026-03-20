@@ -3,22 +3,25 @@ import { url } from 'inspector';
 import { useEffect, useRef, useState } from 'react';
 
 const platinumSponsors = [
+  {name:'Persistent',image:'/Persistent logo 2.jpg.jpeg',url:'https://www.persistent.com'},
   { name: 'Algorand', image: '/algorand_full_logo_white.png',url:'https://www.algorand.com/' },
   { name: 'PMTrack', image:'/PMTrack_logo-01-1.png',url:'https://www.pmtrackerp.in/' },
-  {name:'Persistent',image:'/Persistent logo 2.jpg.jpeg',url:'https://www.persistent.com'}
+  
 ];
 
-const goldSponsors = [
-  { name: 'Weboreel', image: '/weboreel.webp',url:'https://www.weboreel.com/' },
-];
+{/* DO NOT DELETE THIS COMMENT BLOCK — placeholder for future sponsors */}
+/*const goldSponsors = [
+ 
+];*/
 
 const silverSponsors = [
   { name: 'Sinarmas', image: '/sinarmas.png',url:'https://www.sinarmas.com/' },
-  { name: 'RVTechLearn', image: '/RVTechLearn.png',url:'https://www.rvtechlearn.com/' },
+  { name: 'RVTechLearn', image: '/RVTechLearn.png',url:'https://www.rvtechlearn.com/' }
 ]
 
 const bronzeSponsors = [
   { name: 'Vulnuris', image: '/vulnuris.webp', url:'https://www.vulnuris.in/' },
+   { name: 'Weboreel', image: '/weboreel.webp',url:'https://www.weboreel.com/' }
 ]
 
 const platiumHover = { glow: 'rgba(255,255,255,0.35)',   bg: 'rgba(255,255,255,0.08)',   border: 'rgba(255,255,255,0.65)' }
@@ -379,7 +382,7 @@ export default function Sponser() {
             ))}
           </div>
           </div>
-          {/* Gold */}
+          {/* Gold Placeholder : Do not remove 
           <div style={{ marginBottom: 'clamp(20px, 3vw, 40px)' }}>
             <SectionLabel label="Gold Sponsors" color="#eab308" />
             <div
@@ -391,6 +394,7 @@ export default function Sponser() {
               ))}
             </div>
           </div>
+          */}
            {/* Silver */}
           <div style={{ marginBottom: 'clamp(20px, 3vw, 40px)' }}>
             <SectionLabel label="Silver Sponsors" color="#94a3b8" />
