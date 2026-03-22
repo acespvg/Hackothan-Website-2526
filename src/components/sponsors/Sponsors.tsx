@@ -54,12 +54,14 @@ const bronzeSponsors = [
   },
   {
     name: "Shivam Engineers",
-    image: "/Shivam Engineers Logo.png",
+    image:
+      "https://res.cloudinary.com/dszbwlgeo/image/upload/f_auto,q_auto/Shivam_Engineers_logo_kl7rsv",
     url: "https://shivamgroups.in/index.php",
   },
   {
     name: "Shree Engineers",
-    image: "/Shree Engineers Logo.jpeg",
+    image:
+      "https://res.cloudinary.com/dszbwlgeo/image/upload/f_auto,q_auto/Shree_Engineers_logo_ywps4q",
     url: "https://www.shreeengineeringkatrajpune.in/",
   },
 ];
