@@ -2,7 +2,7 @@
 import { url } from 'inspector';
 import { useEffect, useRef, useState } from 'react';
 
-const platinumSponsors = [
+const diamondSponsors = [
   {name:'Persistent',image:'/Persistent logo 2.jpg.jpeg',url:'https://www.persistent.com'},
   { name: 'Algorand', image: '/algorand_full_logo_white.png',url:'https://www.algorand.com/' },
   { name: 'PMTrack', image:'/PMTrack_logo-01-1.png',url:'https://www.pmtrackerp.in/' },
@@ -22,19 +22,23 @@ const silverSponsors = [
 
 const bronzeSponsors = [
   { name: 'Vulnuris', image: '/vulnuris.webp', url:'https://www.vulnuris.in/' },
-   { name: 'Weboreel', image: '/weboreel.webp',url:'https://www.weboreel.com/' }
+   { name: 'Weboreel', image: '/weboreel.webp',url:'https://www.weboreel.com/' },
+   { name: 'Shivam Engineers', image:'Shivam Engineers Logo.png',url:'https://shivamgroups.in/index.php' },
+   { name: 'Shree Engineers', image:'Shree Engineers Logo.jpeg',url:'https://www.shreeengineeringkatrajpune.in/' }
 ]
 
-const platiumHover = { glow: 'rgba(255,255,255,0.35)',   bg: 'rgba(255,255,255,0.08)',   border: 'rgba(255,255,255,0.65)' }
+const diamondHover = { glow: 'rgba(183, 241, 253,0.35)',   bg: 'rgba(255,255,255,0.08)',   border: 'rgba(255,255,255,0.65)' }
 const goldHover    = { glow: 'rgba(234,179,8,0.35)',   bg: 'rgba(234,179,8,0.07)',   border: 'rgba(234,179,8,0.7)'   };
 const silverHover  = { glow: 'rgba(148,163,184,0.3)',  bg: 'rgba(148,163,184,0.06)', border: 'rgba(148,163,184,0.6)' };
 const bronzeHover  = { glow: 'rgba(205,127,50,0.35)',  bg: 'rgba(205,127,50,0.07)', border: 'rgba(205,127,50,0.7)' };
 const partnerHover = { glow: 'rgba(34,211,238,0.3)',   bg: 'rgba(34,211,238,0.06)',  border: 'rgba(34,211,238,0.6)'  };
 
 const css = `
-  .sg-platinum {
+  .sg-diamond {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+    width: 75%;
+    margin: 0 auto;
     gap: 20px;
   }
 
@@ -371,15 +375,15 @@ export default function Sponser() {
             </p>
           </div>
 
-          {/* Platinum */}
+          {/* diamond */}
           <div style={{ marginBottom: 'clamp(20px, 3vw, 40px)' }}>
-            <SectionLabel label="Platinum Sponsors" color="#E5E4E2" />
+            <SectionLabel label="diamond Sponsors" color="#00D7FF" />
             <div
-            className="sg-platinum"
-            style={getGridInlineStyle(platinumSponsors.length, 2)}
+            className="sg-diamond"
+            style={getGridInlineStyle(diamondSponsors.length, 2)}
           >
-            {platinumSponsors.map((s, i) => (
-              <SponsorCard key={i} sponsor={s} hoverStyle={platiumHover} visible={visible} delay={i * 80} />
+            {diamondSponsors.map((s, i) => (
+              <SponsorCard key={i} sponsor={s} hoverStyle={diamondHover} visible={visible} delay={i * 80} />
             ))}
           </div>
           </div>
