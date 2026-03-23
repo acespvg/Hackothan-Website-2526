@@ -579,7 +579,7 @@ export default function HeroSection() {
                 >
                   Last date to register:{" "}
                   <span style={{ color: "#c4b5fd", WebkitTextFillColor: "#c4b5fd", fontWeight: 700}}>
-                    March 22, 2026
+                    March 25, 2026
                   </span>
                 </p>
               </div>
