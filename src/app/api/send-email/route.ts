@@ -94,7 +94,7 @@ export async function POST(req: NextRequest) {
           <div style="margin-top:24px; font-size:14px;">
             <p>
               ⚠ <strong>Important:</strong> If your team is not selected for Round 2, 
-              50% of the registration amount will be refunded.
+              no refund will be provided.
             </p>
           </div>
 
