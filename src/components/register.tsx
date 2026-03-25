@@ -599,8 +599,8 @@ const isValidDriveLink = (url: string): boolean =>
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-// Registration deadline: March 26, 2026 at 3:00 AM
-const REGISTRATION_DEADLINE = new Date(2026, 2, 26, 3, 0, 0); // March 26, 2026, 3:00 AM
+// Registration deadline: March 26, 2026 at 12:00 AM
+const REGISTRATION_DEADLINE = new Date(2026, 2, 26, 0, 0, 0); // March 26, 2026, 12:00 AM
 
 const RegistrationForm: React.FC = () => {
   const [leaderData, setLeaderData] = useState<FormData>(initialFormData);
@@ -921,7 +921,7 @@ const RegistrationForm: React.FC = () => {
               Registration for Ignition HackVerse 2026 has ended. We are no longer accepting team registrations at this time.
             </p>
             <div className="closure-time">
-              Registrations closed on March 26, 2026 at 3:00 AM IST
+              Registrations closed on March 26, 2026 at 12:00 AM IST
             </div>
             <p className="closure-contact">
               If you have any questions, please contact the organizers.
