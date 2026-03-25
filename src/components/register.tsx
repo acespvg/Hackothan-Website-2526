@@ -599,6 +599,9 @@ const isValidDriveLink = (url: string): boolean =>
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
+// Registration deadline: March 26, 2026 at 3:00 AM
+const REGISTRATION_DEADLINE = new Date(2026, 2, 26, 3, 0, 0); // March 26, 2026, 3:00 AM
+
 const RegistrationForm: React.FC = () => {
   const [leaderData, setLeaderData] = useState<FormData>(initialFormData);
   const [teamSize, setTeamSize] = useState<number>(2);
@@ -820,6 +823,114 @@ const RegistrationForm: React.FC = () => {
       <input id={id} type={field.type} name={field.name} value={value as string} onChange={handleChange} required={field.required} className="form-input" placeholder={field.label} />
     );
   };
+
+  // Check if registration is closed
+  const isRegistrationClosed = new Date() >= REGISTRATION_DEADLINE;
+
+  // Closure message styles
+  const closureStyles = `
+    .closure-container {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #060c1a 0%, #0a1428 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .closure-orb {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.4;
+      filter: blur(60px);
+    }
+    .closure-orb-1 {
+      width: 300px; height: 300px;
+      background: radial-gradient(ellipse at center, rgba(99,102,241,0.4), transparent 70%);
+      top: 10%; left: -100px;
+    }
+    .closure-orb-2 {
+      width: 300px; height: 300px;
+      background: radial-gradient(ellipse at center, rgba(16,185,129,0.3), transparent 70%);
+      bottom: 5%; right: -50px;
+    }
+    .closure-card {
+      background: linear-gradient(145deg, #0d1835, #0a122a);
+      border: 1px solid rgba(99,102,241,0.35);
+      border-radius: 24px;
+      padding: 3rem 2rem;
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+      position: relative;
+      z-index: 10;
+      box-shadow: 0 0 80px rgba(99,102,241,0.18), 0 24px 56px rgba(0,0,0,0.55);
+    }
+    .closure-icon {
+      font-size: 4rem;
+      margin-bottom: 1.5rem;
+      animation: scale-pulse 2s ease-in-out infinite;
+    }
+    @keyframes scale-pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    .closure-title {
+      font-family: 'Trebuchet MS', sans-serif;
+      font-size: 2rem;
+      font-weight: 900;
+      color: #ef4444;
+      margin-bottom: 1rem;
+      letter-spacing: -0.02em;
+    }
+    .closure-message {
+      color: #94a3b8;
+      font-size: 1rem;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+    .closure-time {
+      font-size: 0.9rem;
+      color: #64748b;
+      font-style: italic;
+      margin-bottom: 2rem;
+      padding: 1rem;
+      background: rgba(15,23,42,0.5);
+      border-left: 3px solid #ef4444;
+      border-radius: 8px;
+    }
+    .closure-contact {
+      font-size: 0.85rem;
+      color: #a5b4fc;
+      font-weight: 600;
+    }
+  `;
+
+  if (isRegistrationClosed) {
+    return (
+      <>
+        <style>{globalStyles}{closureStyles}</style>
+        <div className="closure-container">
+          <div className="closure-orb closure-orb-1" />
+          <div className="closure-orb closure-orb-2" />
+          <div className="closure-card">
+            <div className="closure-icon">🔒</div>
+            <h1 className="closure-title">Registration Closed</h1>
+            <p className="closure-message">
+              Registration for Ignition HackVerse 2026 has ended. We are no longer accepting team registrations at this time.
+            </p>
+            <div className="closure-time">
+              Registrations closed on March 26, 2026 at 3:00 AM IST
+            </div>
+            <p className="closure-contact">
+              If you have any questions, please contact the organizers.
+            </p>
+          </div>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
