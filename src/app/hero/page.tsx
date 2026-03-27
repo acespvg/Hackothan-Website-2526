@@ -567,7 +567,7 @@ export default function HeroSection() {
                   </Link>
                 </div>
 
-                {/* Deadline line */}
+                {/* Deadline line
                 <p
                   className={`slide-up ${mounted ? "" : "opacity-0"}`}
                   style={{
@@ -581,7 +581,7 @@ export default function HeroSection() {
                   <span style={{ color: "#c4b5fd", WebkitTextFillColor: "#c4b5fd", fontWeight: 700}}>
                     March 25, 2026
                   </span>
-                </p>
+                </p> */}
               </div>
 
             </div>
