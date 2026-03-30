@@ -11,7 +11,7 @@ const diamondSponsors = [
   {
     name: "Algorand",
     image: "/algorand_full_logo_white.png",
-    url: "https://www.algorand.com/",
+    url: "https://www.algorand.co/",
   },
   {
     name: "PMTrack",
@@ -26,6 +26,11 @@ const goldSponsors = [
     image: "/vidhit.jpg",
     url: "https://www.linkedin.com/company/vidhit-technologies",
   },
+  {
+    name: "RVTechLearn",
+    image: "/RVTechLearn.png",
+    url: "https://www.rvtechlearn.com/",
+  },
 ];
 
 const silverSponsors = [
@@ -34,11 +39,7 @@ const silverSponsors = [
     image: "/sinarmas.png",
     url: "https://www.sinarmas.com/",
   },
-  {
-    name: "RVTechLearn",
-    image: "/RVTechLearn.png",
-    url: "https://www.rvtechlearn.com/",
-  },
+  
 ];
 
 const bronzeSponsors = [
@@ -46,11 +47,6 @@ const bronzeSponsors = [
     name: "Vulnuris",
     image: "/vulnuris.webp",
     url: "https://www.vulnuris.in/",
-  },
-  {
-    name: "Weboreel",
-    image: "/weboreel.webp",
-    url: "https://www.weboreel.com/",
   },
   {
     name: "Shivam Engineers",
