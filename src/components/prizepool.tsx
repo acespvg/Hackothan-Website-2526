@@ -65,7 +65,7 @@ const TRACKS = [
     color: "#34d399",
     soft: "rgba(52,211,153,",
     label: "Track IV",
-    title: "Future Learning (EduTech & FinTech)",
+    title: "Future Learning (EduTech & Healthcare)",
     Icon: Sprout,
     gradient: "linear-gradient(135deg, rgba(52,211,153,0.15) 0%, rgba(52,211,153,0.04) 100%)",
     border: "rgba(52,211,153,0.30)",
