@@ -252,6 +252,13 @@ const globalStyles = `
     display: grid; grid-template-columns: 1fr; gap: 1.2rem; margin-top: 0.5rem;
   }
 
+  .download-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+  }
+
   .link-input-card {
     background: rgba(6,12,26,0.7);
     border: 1px solid rgba(99,102,241,0.2);
@@ -276,12 +283,14 @@ const globalStyles = `
     font-size: 1.1rem; flex-shrink: 0;
   }
   .link-card-icon.ppt-icon { background: rgba(99,102,241,0.18); border: 1px solid rgba(99,102,241,0.3); }
+  .link-card-icon.ps-icon { background: rgba(251,191,36,0.14); border: 1px solid rgba(251,191,36,0.28); }
   .link-card-label {
     font-family: 'Trebuchet MS', sans-serif;
     font-size: 0.75rem; font-weight: 700;
     letter-spacing: 0.08em; text-transform: uppercase;
   }
   .link-card-label.ppt-label { color: #a5b4fc; }
+  .link-card-label.ps-label { color: #fcd34d; }
   .link-card-sublabel { font-size: 0.72rem; color: #64748b; margin-top: 1px; }
 
   .link-input-field {
@@ -1044,12 +1053,30 @@ const RegistrationForm: React.FC = () => {
                   <li><strong>Scalability and Future Scope</strong></li>
                   <li><strong>Presentation and Structure</strong></li>
                 </ul>
-                <p><strong>Note:</strong> The first round is purely for screening purposes. Your main problem statement for the hackathon will be different and provided 16 hours before the event.</p>
+                <p><strong>Note:</strong> Download the problem statement PDF above before submitting your project presentation. The first round is purely for screening purposes.</p>
                 <p><strong>If you are not selected for Round 2, no refund will be provided.</strong></p>
                 <p>Ensure your shared presentation link is publicly accessible (view access for anyone with the link).</p>
               </div>
 
               <div className="link-input-group">
+                <a
+                  className="link-input-card download-card"
+                  href="/Problem-Statements.pdf"
+                  download="Problem-Statements.pdf"
+                  aria-label="Download problem statement PDF"
+                >
+                  <div className="link-card-header">
+                    <div className="link-card-icon ps-icon">📄</div>
+                    <div>
+                      <div className="link-card-label ps-label">Problem Statement PDF</div>
+                      <div className="link-card-sublabel">Download the official hackathon brief</div>
+                    </div>
+                  </div>
+                  <div className="link-hint">
+                    <div className="link-hint-dot" />Click to download and review before submitting your PPT
+                  </div>
+                </a>
+
                 <div className={`link-input-card${pptLinkError ? ' invalid-link' : ''}`}>
                   <div className="link-card-header">
                     <div className="link-card-icon ppt-icon">📊</div>
